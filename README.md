@@ -135,31 +135,89 @@ aliang-shuzhi-html-ppt/
 
 ## English
 
-**A purpose-built HTML deck template + design system for performance reviews & reports**, driven by a
-coding agent (Claude Code / Codex / Cursor…). Output is one `index.html` you open full-screen in any
-browser — no PowerPoint, no Keynote. The visual language emulates **apple.com** (SF Pro + PingFang SC,
-restrained color, soft layered shadows, generous whitespace). The default is a black-&-white business
-theme, but **brand colors are swappable** — change a few tokens to re-brand to any color or style.
+**A purpose-built HTML deck template + design system for performance reviews & reports (述职 / 汇报)**,
+driven by a coding agent (Claude Code / Codex / Cursor…). The output is a single `index.html` that
+plays full-screen in any browser — no PowerPoint, no Keynote.
 
-It's a **design system + workflow**, not a fill-in template: give the agent your material and it builds
-the deck; re-theme by changing tokens, re-content by changing text. The three rules that make it read
-as *designed*: **(1) confirm the page-by-page structure before building, (2) emulate Apple's design
-language and ban emoji icons, (3) keep animation restrained — content outranks form in a review.**
+The visual language emulates **apple.com**: SF Pro + PingFang SC type, restrained color, soft layered
+shadows, generous whitespace, one focal point per slide. The default is a black-&-white business-blue
+theme, but **brand colors are fully swappable** — change a few tokens to re-brand to your company's
+colors or another style.
 
-**Install:** the **whole repo is the skill** — clone all of it, not just `SKILL.md` (which only works
-alongside its `references/` `templates/` `examples/` `scripts/`). For Claude Code:
-`git clone https://github.com/aurthur/aliang-shuzhi-html-ppt ~/.claude/skills/aliang-shuzhi-html-ppt`.
-For other agents, clone the repo and point them at `SKILL.md`. The layout follows Anthropic's Agent
-Skills convention; the design-system doc borrows Open Design's `DESIGN.md` section schema.
+It's a **design system + workflow**, not a fill-in template: hand the agent your material and it
+assembles the whole deck by the rules; re-theme by changing colors, re-content by changing text —
+**the structure and the Apple-grade polish are reused.** *(Screenshots: see the gallery near the top —
+the sample is a fully fictional / desensitized example.)*
 
-**Use it:** ask your agent for "an HTML deck for my review from this material." It confirms the outline
-with you, themes (defaults to the bundled palette), builds from `templates/deck-template.html`, lints
-with `scripts/validate-deck.sh`, and packages. See `examples/business-deck/index.html` for a complete,
-desensitized reference (← / → to navigate, `F` for full-screen).
+### What it solves
+Making a review deck the old way is slow — a day on data, a day fighting alignment and templates. With
+an AI building HTML instead:
+- **Edit by voice** — align, move, reword: one sentence does it.
+- **Higher visual ceiling** — images, motion, inline video are easy; it's a web page.
+- **Batch edits in one shot** — a wrong word fixed everywhere at once.
+- **A speaker-notes draft for free** — the agent already knows every slide's intent.
+- **Simple to share** — zip it; the recipient unzips and opens `index.html`.
 
-**Non-negotiables:** no emoji icons (use an open-source line-icon SVG set); no card with a left
-vertical color bar; statements are large text with a colored keyword, not boxes; no showy deck-wide
-animation. The first three are enforced by the lint script.
+The catch: the AI's *first* "looks-good" draft is usually plastic AI slop — emoji icons, a tinted box
+around everything. **This skill is the full set of rules that kills that look.**
+
+### Three keys (to a good review deck)
+1. **Pin the pagination before building.** Don't dump prose and let the model guess the page split —
+   give it structured input (one block per topic: background · goal · key data · thinking · to-do), or
+   outline it together first.
+2. **Emulate a top brand's design language; ban emoji.** Don't teach the model "taste" — point it at
+   apple.com. Forbid emoji icons (the #1 cheap-AI tell); use one open-source line-icon set.
+3. **Keep animation restrained.** In a review, content outranks form. Let one or two moments shine and
+   keep the rest calm.
+
+### Install (the whole repo IS the skill)
+`SKILL.md` is only the entry point — it references `references/`, `templates/`, `examples/`,
+`scripts/` and does nothing alone. **Clone the whole repo:**
+- **Claude Code** — clone into the skills dir (auto-discovered):
+  ```bash
+  git clone https://github.com/aurthur/aliang-shuzhi-html-ppt ~/.claude/skills/aliang-shuzhi-html-ppt
+  ```
+- **Other agents (Codex / Cursor / web)** — clone the repo locally and point the agent at `SKILL.md`.
+- **Just want to look** — open `examples/business-deck/index.html`, no install needed.
+
+### How to use
+1. Tell the agent: *"Build me an HTML review deck from this material."*
+2. It follows `SKILL.md`: clarify goal & audience → **confirm a page-by-page outline with you** →
+   theme (defaults to the bundled palette) → build from `templates/deck-template.html` → self-check
+   with `scripts/validate-deck.sh` → package.
+3. Preview anytime: open `examples/business-deck/index.html` (← / → to navigate, `F` for full-screen).
+
+### Re-brand to your own colors / style
+Every brandable color is a `:root` token. **Default = Apple-blue business.** To change:
+- Edit `--accent` (+ its `-d / -soft / -line` shades) and the cover/divider/closing gradient — that's it.
+- E.g. corporate green `#1f9a40`, violet `#6E56F0`, or a multi-color / aurora scheme (chapter pages only).
+- Neutrals, shadows, and radius stay put — that's the root of the Apple feel.
+- **Multi-color brand** (Google / Microsoft…)? Don't just change one token — see
+  `references/brand-review.md`: a flowing corner brand-mark + chapter gradients + soft palette tints on
+  the small sets, bounded by a ≤2-accent-per-slide cap and a per-page + whole-deck review.
+
+If you don't choose, the agent uses the default and tells you it's swappable.
+
+### Repo structure & design highlights
+See the structure tree above. The layout follows **Anthropic's Agent Skills** convention (`SKILL.md`
+entry + progressive disclosure); the design-system doc borrows **Open Design**'s `DESIGN.md` schema.
+Highlights:
+- **System Apple fonts, no web-font** — offline / projector-safe (SF Pro can't be web-embedded, so it's
+  a fallback chain).
+- **Restrained color** — near-neutral surface + near-black text + one accent; brand color only on
+  numbers, labels, badges, keywords, and chapter-page gradients.
+- **Numbers as a first-class rule** — ▲ green = up, ▼ red = down, one brand-blue flagship per data
+  page; numbers count up on entry.
+- **Soft layered shadows**, 18–22px radius, generous whitespace, one focal point per slide.
+- **One signature animation per deck** (e.g. the flywheel) — a garnish, not the dish.
+
+### Non-negotiables
+- ❌ Emoji as icons → one open-source line-icon set (SVG sprite).
+- ❌ A card with a left vertical color bar (the most AI-generated-looking pattern).
+- ❌ Boxing every statement → a viewpoint is large text + one colored keyword, not a tinted box.
+- ❌ Showy, deck-wide animation in a review.
+
+`scripts/validate-deck.sh` enforces the first three (plus the AI-slop default palette).
 
 ## License
 
