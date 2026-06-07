@@ -12,6 +12,9 @@ description: >-
 
 # 阿亮 · 述职 HTML PPT — Apple 风格 HTML 演示设计系统
 
+> **This file is the entry point of a folder-based skill — not standalone.** It references sibling
+> files under `references/`, `templates/`, `examples/`, and `scripts/`. Use the whole folder.
+
 A design system + workflow for building **self-contained HTML decks** for performance reviews and
 reports. The output is a single `index.html` (plus an `assets/` folder) that runs full-screen in any
 browser — keyboard navigation, progress bar, inline video, restrained animation. Swap a handful of

@@ -56,13 +56,26 @@ Cursor…）来用。产物是一个 `index.html`，浏览器全屏打开就能�
 3. **动画和炫技要克制。** 述职场景，内容权重永远大于呈现。挑一两个最想让老板记住的地方稍微亮一下技术，其余保持
    安静。业绩硬 + 一点恰到好处的呈现 = 锦上添花；业绩一般还堆一堆炫酷动画 = 帮倒忙。
 
+## 安装：整个仓库就是这个 skill（要全下，不是只拿 SKILL.md）
+
+**`SKILL.md` 只是入口，不能单独用。** 它会按需引用 `references/`、`templates/`、`examples/`、`scripts/`
+里的文件 —— 单独一个 `SKILL.md` 跑不起来。所以请 **clone / 下载整个仓库**：
+
+- **Claude Code** —— clone 到 skills 目录，会被自动发现：
+  ```bash
+  git clone https://github.com/aurthur/aliang-shuzhi-html-ppt \
+    ~/.claude/skills/aliang-shuzhi-html-ppt
+  ```
+- **其它 Agent（Codex / Cursor / 网页版）** —— 把整个仓库下到本地，让 Agent 从 `SKILL.md` 起步
+  （它会自己去读同目录下的 references / templates / examples）。
+- **只想先看效果** —— 直接打开 `examples/business-deck/index.html`，不用装。
+
 ## 怎么用
 
-1. 把这个文件夹放到 Agent 能读到的地方（当成一个 skill，或直接让它读 `SKILL.md`）。
-2. 跟它说：*"基于这份材料，帮我做个述职用的 HTML PPT。"*
-3. Agent 会按 `SKILL.md` 走：搞清目标和受众 → **先和你确认逐页结构** → 选主题（不指定就用默认那套）→ 从
+1. 装好后，跟 Agent 说：*"基于这份材料，帮我做个述职用的 HTML PPT。"*
+2. Agent 会按 `SKILL.md` 走：搞清目标和受众 → **先和你确认逐页结构** → 选主题（不指定就用默认那套）→ 从
    `templates/deck-template.html` 搭 → 用 `scripts/validate-deck.sh` 自检 → 打包。
-4. 想先看效果：打开 `examples/business-deck/index.html`（← / → 翻页，`F` 全屏）。
+3. 想先看效果：打开 `examples/business-deck/index.html`（← / → 翻页，`F` 全屏）。
 
 ## 换成你自己的品牌 / 风格
 
@@ -93,6 +106,11 @@ aliang-shuzhi-html-ppt/
 └── scripts/
     └── validate-deck.sh           # 按硬规则 lint 一份 deck
 ```
+
+> 这个目录结构遵循 **Anthropic「Agent Skills」约定**：`SKILL.md` 作入口，`references/` `scripts/`
+> 等做「渐进式披露」（Agent 先读 SKILL.md，需要时才展开深层文件）。设计系统文档的分章参考了
+> **Open Design** 项目的 `DESIGN.md` 九段式（配色 / 字体 / 间距 / 动效 / 反面样式…）。
+> **整个文件夹是一个 skill —— 一起用，别只拿 `SKILL.md`。**
 
 ## 设计系统要点
 
@@ -127,11 +145,16 @@ the deck; re-theme by changing tokens, re-content by changing text. The three ru
 as *designed*: **(1) confirm the page-by-page structure before building, (2) emulate Apple's design
 language and ban emoji icons, (3) keep animation restrained — content outranks form in a review.**
 
-**Use it:** point your agent at `SKILL.md` and ask for "an HTML deck for my review from this material."
-It confirms the outline with you, themes (defaults to the bundled palette), builds from
-`templates/deck-template.html`, lints with `scripts/validate-deck.sh`, and packages. See
-`examples/business-deck/index.html` for a complete, desensitized reference (← / → to navigate, `F` for
-full-screen).
+**Install:** the **whole repo is the skill** — clone all of it, not just `SKILL.md` (which only works
+alongside its `references/` `templates/` `examples/` `scripts/`). For Claude Code:
+`git clone https://github.com/aurthur/aliang-shuzhi-html-ppt ~/.claude/skills/aliang-shuzhi-html-ppt`.
+For other agents, clone the repo and point them at `SKILL.md`. The layout follows Anthropic's Agent
+Skills convention; the design-system doc borrows Open Design's `DESIGN.md` section schema.
+
+**Use it:** ask your agent for "an HTML deck for my review from this material." It confirms the outline
+with you, themes (defaults to the bundled palette), builds from `templates/deck-template.html`, lints
+with `scripts/validate-deck.sh`, and packages. See `examples/business-deck/index.html` for a complete,
+desensitized reference (← / → to navigate, `F` for full-screen).
 
 **Non-negotiables:** no emoji icons (use an open-source line-icon SVG set); no card with a left
 vertical color bar; statements are large text with a colored keyword, not boxes; no showy deck-wide
