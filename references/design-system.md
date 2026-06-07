@@ -133,10 +133,33 @@ say what the slide is *about*, not a slogan. No sub-subtitles competing with the
 
 - **Default**: the business-blue sample (`--accent:#0A84FF`). When the user doesn't choose, use it and
   tell them it's the default and swappable.
-- **Re-brand**: change `--accent` + its `-d`/`-soft`/`-line` shades, and the cover/divider/closing
-  gradient. That's the whole job. Examples: corporate green `#1f9a40`, violet `#6E56F0`, aurora
-  (multi-stop gradient on chapter pages only). Keep neutrals/shadows/radius — that's the Apple base.
+- **Single-color brand re-brand** (Apple, a corporate blue/green/violet): change `--accent` + its
+  `-d`/`-soft`/`-line` shades, and the cover/divider/closing gradient. That's the whole job. Keep
+  neutrals/shadows/radius — that's the Apple base.
 - **Logo**: replace the placeholder `<div class="lg">…</div>` with `<img>` in cover/divider/closing.
+
+### ⚠️ Multi-color brands (Google, Microsoft, Slack, eBay, NBC…) — read this
+
+Changing ONE `--accent` is **not** a re-brand for a multi-color brand — it collapses a several-color
+identity into a single color, and the brand reads only on the cover while every content page looks
+generic. (Real failure: a "Google colors" deck where only the cover had the 4 colors; inside it was
+mono-blue and indistinguishable from the default.) Instead, **distribute the palette across the
+structural sets the deck already has** — and keep it structured, not rainbow:
+
+- **Map a parallel set to the palette, in a consistent order.** The 4 combo levers → 4 brand colors;
+  the N flywheel node badges → cycle the palette; the right-column To-Do cards → the non-primary
+  colors; an overview table's row markers → rotate. One color per item, same mapping every time —
+  this reads as an intentional brand system (think Google Workspace icons), not decoration.
+- **Pick ONE primary** from the palette for the always-on accent (kicker badge, links, progress bar,
+  flagship figure, flywheel hub) so the deck still has a backbone. Google → blue; Microsoft → blue;
+  Slack → aubergine. The other brand colors appear only in the mapped sets + chapter pages.
+- **Chapter pages get the full multi-color burst**: cover/closing keyword as a multi-stop gradient,
+  divider numbers as a gradient across the glyphs. (Watch CSS specificity — `.divider .left .dno`
+  beats `.divider .dno`; the gradient's `color:transparent` silently loses if your selector is weaker.)
+- **Semantics still win**: up=green / down=red on numbers regardless of brand; a light brand color
+  (e.g. Google yellow) on a filled bar/badge needs dark text for contrast.
+- This is not a license for rainbow soup — restraint still rules. The discipline is *one color per
+  item in a set, consistent mapping*; never random per-element color for decoration.
 
 ## Anti-patterns
 

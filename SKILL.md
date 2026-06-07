@@ -90,10 +90,16 @@ layered-shots / flywheel) → todo-featured → closing.
 
 ## Theming (the flexibility)
 
-Everything brandable lives in `:root` as tokens. To re-brand, change `--accent` (and its `-d` /
-`-soft` / `-line` shades) plus the cover/divider/closing gradient — that's it. The bundled example
-uses an Apple-blue business theme (`--accent:#0A84FF`). Want creative/aurora, corporate-green,
-violet? Change the tokens, not the structure. **If the user doesn't choose, default to the sample's
+Everything brandable lives in `:root` as tokens. For a **single-color brand** (Apple, a corporate
+blue/green/violet), re-branding is just changing `--accent` (+ its `-d`/`-soft`/`-line` shades) and
+the cover/divider/closing gradient. The bundled example uses an Apple-blue business theme.
+
+⚠️ For a **multi-color brand** (Google, Microsoft, Slack…), changing one `--accent` is NOT enough —
+it collapses the identity into one color and the brand only shows on the cover. You must **distribute
+the palette across the deck's structural sets** (the levers, flywheel nodes, To-Do cards each take a
+brand color in a consistent order; chapter numbers/keywords use a multi-stop gradient) while keeping
+one primary as the backbone. See `references/design-system.md` → "Multi-color brands". Change the
+tokens and the distribution, not the structure. **If the user doesn't choose, default to the sample's
 palette and tell them it's the default + that it's swappable.**
 
 ## What's in this repo
