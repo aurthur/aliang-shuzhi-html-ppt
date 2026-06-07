@@ -141,25 +141,35 @@ say what the slide is *about*, not a slogan. No sub-subtitles competing with the
 ### ⚠️ Multi-color brands (Google, Microsoft, Slack, eBay, NBC…) — read this
 
 Changing ONE `--accent` is **not** a re-brand for a multi-color brand — it collapses a several-color
-identity into a single color, and the brand reads only on the cover while every content page looks
+identity into a single color, so the brand reads only on the cover while every content page looks
 generic. (Real failure: a "Google colors" deck where only the cover had the 4 colors; inside it was
-mono-blue and indistinguishable from the default.) Instead, **distribute the palette across the
-structural sets the deck already has** — and keep it structured, not rainbow:
+mono-blue and indistinguishable from the default.) But the fix is **not** to splash the palette onto
+everything either — that gets busy fast. The elegant move, in priority order:
 
-- **Map a parallel set to the palette, in a consistent order.** The 4 combo levers → 4 brand colors;
-  the N flywheel node badges → cycle the palette; the right-column To-Do cards → the non-primary
-  colors; an overview table's row markers → rotate. One color per item, same mapping every time —
-  this reads as an intentional brand system (think Google Workspace icons), not decoration.
-- **Pick ONE primary** from the palette for the always-on accent (kicker badge, links, progress bar,
-  flagship figure, flywheel hub) so the deck still has a backbone. Google → blue; Microsoft → blue;
-  Slack → aubergine. The other brand colors appear only in the mapped sets + chapter pages.
-- **Chapter pages get the full multi-color burst**: cover/closing keyword as a multi-stop gradient,
-  divider numbers as a gradient across the glyphs. (Watch CSS specificity — `.divider .left .dno`
-  beats `.divider .dno`; the gradient's `color:transparent` silently loses if your selector is weaker.)
-- **Semantics still win**: up=green / down=red on numbers regardless of brand; a light brand color
-  (e.g. Google yellow) on a filled bar/badge needs dark text for contrast.
-- This is not a license for rainbow soup — restraint still rules. The discipline is *one color per
-  item in a set, consistent mapping*; never random per-element color for decoration.
+1. **A flowing multi-color "brand mark" in one consistent spot — preferred.** Take the small element
+   that sits in the same place on every content page (the **top-left kicker page-number badge**) and
+   make it a multi-stop gradient of the brand palette, gently animated (a slow `background-position`
+   shift = an aurora/"流光" pulse). It's the same size and place every page, so it reads as a living
+   logo — the brand is *felt throughout* while content stays calm. This alone usually does it.
+   ```css
+   .kicker .num{background:linear-gradient(110deg,#4285F4,#34A853,#FBBC05,#EA4335,#4285F4);
+     background-size:260% 100%; animation:numflow 7s linear infinite;}
+   @keyframes numflow{to{background-position:-260% 0;}}
+   ```
+2. **Chapter pages get the full multi-color burst**: cover/closing keyword as a multi-stop gradient,
+   divider numbers as a gradient across the glyphs. (Watch CSS specificity — `.divider .left .dno`
+   beats `.divider .dno`; the gradient's `color:transparent` silently loses to the weaker selector.)
+3. **At most ONE content "set" mapped to the palette**, if you want a bolder moment. A genuinely
+   parallel set (e.g. the 4 combo levers → 4 brand-color icon badges, one per item in a fixed order,
+   Google-Workspace-icon style) is tasteful. Do **not** also color the flywheel nodes AND the To-Do
+   badges AND the table rows — that's the busy version. Pick one set, leave the rest on the primary.
+4. **Keep one primary** from the palette as the backbone (links, progress bar, flagship figure,
+   flywheel hub): Google → blue, Microsoft → blue, Slack → aubergine.
+
+**Semantics still win**: up=green / down=red on numbers regardless of brand; a light brand color
+(e.g. Google yellow) on a filled bar/badge needs dark text for contrast. And it's never a license for
+rainbow soup — restraint rules. Concentrate the multi-color (the brand mark + chapter pages); let
+content breathe on the primary.
 
 ## Anti-patterns
 

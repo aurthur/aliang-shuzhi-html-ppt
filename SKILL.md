@@ -95,12 +95,12 @@ blue/green/violet), re-branding is just changing `--accent` (+ its `-d`/`-soft`/
 the cover/divider/closing gradient. The bundled example uses an Apple-blue business theme.
 
 ⚠️ For a **multi-color brand** (Google, Microsoft, Slack…), changing one `--accent` is NOT enough —
-it collapses the identity into one color and the brand only shows on the cover. You must **distribute
-the palette across the deck's structural sets** (the levers, flywheel nodes, To-Do cards each take a
-brand color in a consistent order; chapter numbers/keywords use a multi-stop gradient) while keeping
-one primary as the backbone. See `references/design-system.md` → "Multi-color brands". Change the
-tokens and the distribution, not the structure. **If the user doesn't choose, default to the sample's
-palette and tell them it's the default + that it's swappable.**
+it collapses the identity into one color and the brand only shows on the cover. But don't splash the
+palette onto everything either. The elegant fix: make the **top-left page-number badge a flowing
+multi-color gradient** (a consistent "brand mark" on every page), give chapter pages a multi-stop
+gradient, keep ONE primary as the backbone, and map at most one content set (e.g. the combo levers)
+to the palette. See `references/design-system.md` → "Multi-color brands". **If the user doesn't
+choose, default to the sample's palette and tell them it's the default + that it's swappable.**
 
 ## What's in this repo
 
