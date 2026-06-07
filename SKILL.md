@@ -1,5 +1,5 @@
 ---
-name: html-report-deck
+name: aliang-shuzhi-html-ppt
 description: >-
   Builds a self-contained, Apple-style HTML presentation deck — one .html file that opens
   full-screen in any browser, no PowerPoint or Keynote. A flexible design system (brand-color
@@ -10,7 +10,7 @@ description: >-
   / on-brand deck. Default theme is a black-&-white business sample; brand colors are swappable.
 ---
 
-# HTML Report Deck — Apple 风格 HTML 演示设计系统
+# 阿亮 · 述职 HTML PPT — Apple 风格 HTML 演示设计系统
 
 A design system + workflow for building **self-contained HTML decks** for performance reviews and
 reports. The output is a single `index.html` (plus an `assets/` folder) that runs full-screen in any
