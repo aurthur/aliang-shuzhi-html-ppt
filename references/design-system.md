@@ -143,33 +143,36 @@ say what the slide is *about*, not a slogan. No sub-subtitles competing with the
 Changing ONE `--accent` is **not** a re-brand for a multi-color brand — it collapses a several-color
 identity into a single color, so the brand reads only on the cover while every content page looks
 generic. (Real failure: a "Google colors" deck where only the cover had the 4 colors; inside it was
-mono-blue and indistinguishable from the default.) But the fix is **not** to splash the palette onto
-everything either — that gets busy fast. The elegant move, in priority order:
+mono-blue and indistinguishable from the default.) But the opposite — bold, saturated brand color on
+everything, or an animated badge — gets loud and busy. The sweet spot is **soft, consistent, static
+distribution**:
 
-1. **A flowing multi-color "brand mark" in one consistent spot — preferred.** Take the small element
-   that sits in the same place on every content page (the **top-left kicker page-number badge**) and
-   make it a multi-stop gradient of the brand palette, gently animated (a slow `background-position`
-   shift = an aurora/"流光" pulse). It's the same size and place every page, so it reads as a living
-   logo — the brand is *felt throughout* while content stays calm. This alone usually does it.
+1. **A static multi-color "brand mark" in one consistent spot.** The small element in the same place
+   on every content page (the **top-left kicker page-number badge**) gets a multi-stop gradient of the
+   palette. **Do not animate it** — a moving badge is distracting; a still gradient already reads as a
+   living logo. The brand is felt on every page while content stays calm.
    ```css
-   .kicker .num{background:linear-gradient(110deg,#4285F4,#34A853,#FBBC05,#EA4335,#4285F4);
-     background-size:260% 100%; animation:numflow 7s linear infinite;}
-   @keyframes numflow{to{background-position:-260% 0;}}
+   .kicker .num{background:linear-gradient(125deg,#4285F4,#34A853 40%,#FBBC05 66%,#EA4335);}
    ```
 2. **Chapter pages get the full multi-color burst**: cover/closing keyword as a multi-stop gradient,
    divider numbers as a gradient across the glyphs. (Watch CSS specificity — `.divider .left .dno`
    beats `.divider .dno`; the gradient's `color:transparent` silently loses to the weaker selector.)
-3. **At most ONE content "set" mapped to the palette**, if you want a bolder moment. A genuinely
-   parallel set (e.g. the 4 combo levers → 4 brand-color icon badges, one per item in a fixed order,
-   Google-Workspace-icon style) is tasteful. Do **not** also color the flywheel nodes AND the To-Do
-   badges AND the table rows — that's the busy version. Pick one set, leave the rest on the primary.
-4. **Keep one primary** from the palette as the backbone (links, progress bar, flagship figure,
-   flywheel hub): Google → blue, Microsoft → blue, Slack → aubergine.
+3. **Distribute SOFT tints of a fixed sub-palette across the deck's small "N-item sets"** — this is
+   wanted, not forbidden, as long as it's *light and consistent*. Pick **3 colors** (e.g. Google
+   blue/red/green) and map them, in the same order every time, onto each parallel set: the 3 context
+   cards, the 3 step badges, the 3 carousel tabs, the 3 To-Do icons, the flywheel node badges. Use
+   **light tints** — a pale colored background + a colored icon/heading — not bold saturated fills.
+   Tiny number badges may stay solid (white numeral needs it). Soft + same mapping everywhere = the
+   brand is felt throughout without shouting. (One genuinely 4-item set, like the combo levers, can
+   use all 4 brand colors as a slightly bolder Workspace-icon moment.)
+4. **Keep one primary** from the palette as the backbone for the big/structural bits (featured block,
+   flywheel hub, progress bar, flagship figure, links): Google → blue, Microsoft → blue, Slack →
+   aubergine.
 
 **Semantics still win**: up=green / down=red on numbers regardless of brand; a light brand color
-(e.g. Google yellow) on a filled bar/badge needs dark text for contrast. And it's never a license for
-rainbow soup — restraint rules. Concentrate the multi-color (the brand mark + chapter pages); let
-content breathe on the primary.
+(e.g. Google yellow) on a filled bar/badge needs dark text for contrast. The two failure modes to
+avoid: **(a) only the cover colored** (superficial), and **(b) bold color on everything / an animated
+badge** (loud). Aim between them — soft, consistent, still.
 
 ## Anti-patterns
 
