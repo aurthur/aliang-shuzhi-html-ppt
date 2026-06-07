@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="mock.css"></head>
+<body><div class="app">
+  <div class="tb">
+    <div class="lg">A</div><div class="nm">AI <b>Console</b></div>
+    <div class="tabs"><a>总览</a><a>用量</a><a>收入</a><a class="on">成本</a><a>场景</a></div>
+    <div class="sp"></div>
+    <div class="pill"><span class="dot" style="background:var(--warn)"></span>预算 68% 已用</div>
+    <div class="btn">保存配置</div><div class="av"></div>
+  </div>
+  <div class="bd">
+    <div class="h1">配额 & 成本配置<span class="mu">每个场景的 token 上限、成本红线都在这里设 —— 避免悄悄烧超</span></div>
+    <div class="row" style="flex:1;min-height:0;">
+      <div class="card" style="flex:1.6;display:flex;flex-direction:column;gap:12px;">
+        <div class="ct">场景配额 · 按价值分级</div>
+        <div class="field"><div><div class="fl">智能客服 <span class="tag acc" style="margin-left:6px;">高价值</span></div><div class="fm">日上限 · 成本红线 ¥0.9 / 千 token</div></div><div style="display:flex;align-items:center;gap:14px;"><span class="inp">2,000k / 日</span><span class="sw"></span></div></div>
+        <div class="field"><div><div class="fl">导购推荐 <span class="tag acc" style="margin-left:6px;">高价值</span></div><div class="fm">日上限 · 成本红线 ¥0.9 / 千 token</div></div><div style="display:flex;align-items:center;gap:14px;"><span class="inp">1,500k / 日</span><span class="sw"></span></div></div>
+        <div class="field"><div><div class="fl">内容生成</div><div class="fm">日上限 · 成本红线 ¥1.2 / 千 token</div></div><div style="display:flex;align-items:center;gap:14px;"><span class="inp">800k / 日</span><span class="sw"></span></div></div>
+        <div class="field" style="opacity:.6;"><div><div class="fl">闲聊 / 娱乐</div><div class="fm">低转化 · 已限流</div></div><div style="display:flex;align-items:center;gap:14px;"><span class="inp">120k / 日</span><span class="sw off"></span></div></div>
+      </div>
+      <div class="card" style="flex:1;display:flex;flex-direction:column;align-items:center;">
+        <div class="ct" style="align-self:flex-start;">本月成本预算</div>
+        <svg class="ring-g" viewBox="0 0 120 120" style="margin:18px 0 6px;">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#eef0f4" stroke-width="14"/>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#0A84FF" stroke-width="14" stroke-linecap="round" stroke-dasharray="214 314" transform="rotate(-90 60 60)"/>
+          <text x="60" y="56" text-anchor="middle" font-size="26" font-weight="800" fill="#1d1d22">68%</text>
+          <text x="60" y="76" text-anchor="middle" font-size="11" font-weight="600" fill="#9a9aa3">已用预算</text>
+        </svg>
+        <div style="width:100%;margin-top:auto;display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;"><span class="muted">预算上限</span><span class="mono">¥860,000</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;"><span class="muted">本月已用</span><span class="mono acc">¥584,800</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;"><span class="muted">预计结余</span><span class="mono pos">¥275,200</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></body></html>

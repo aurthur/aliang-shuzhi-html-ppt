@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="mock.css"></head>
+<body><div class="app">
+  <div class="tb">
+    <div class="lg">A</div><div class="nm">AI <b>Console</b></div>
+    <div class="tabs"><a>总览</a><a>用量</a><a>收入</a><a>成本</a><a class="on">场景</a></div>
+    <div class="sp"></div>
+    <div class="pill"><span class="dot" style="background:var(--acc)"></span>价值分模型 v2</div>
+    <div class="btn">应用投放策略</div><div class="av"></div>
+  </div>
+  <div class="bd">
+    <div class="h1">高价值场景识别<span class="mu">按"付费意愿 × 留存 × 毛利"打分，决定 token 投给谁</span></div>
+    <div class="card" style="flex:1;min-height:0;padding:10px 6px 6px;">
+      <table>
+        <thead><tr><th style="padding-left:20px;">场景</th><th>价值分</th><th style="width:230px;">打分构成</th><th>付费意愿</th><th>毛利率</th><th style="text-align:right;padding-right:20px;">投放建议</th></tr></thead>
+        <tbody>
+          <tr><td style="padding-left:20px;"><div class="uname"><div class="uav" style="background:linear-gradient(140deg,#bfe6cb,#7ed79a);color:#1faa4b;">1</div>智能客服</div></td><td class="mono acc" style="font-size:17px;">92</td><td><div class="scorebar"><i style="width:92%;background:linear-gradient(90deg,#3aa0ff,#0A84FF)"></i></div></td><td class="mono">高</td><td class="mono pos">71%</td><td style="text-align:right;padding-right:20px;"><span class="tag paid">加大投放</span></td></tr>
+          <tr><td style="padding-left:20px;"><div class="uname"><div class="uav" style="background:linear-gradient(140deg,#bfe6cb,#7ed79a);color:#1faa4b;">2</div>导购推荐</div></td><td class="mono acc" style="font-size:17px;">86</td><td><div class="scorebar"><i style="width:86%;background:linear-gradient(90deg,#3aa0ff,#0A84FF)"></i></div></td><td class="mono">高</td><td class="mono pos">68%</td><td style="text-align:right;padding-right:20px;"><span class="tag paid">加大投放</span></td></tr>
+          <tr><td style="padding-left:20px;"><div class="uname"><div class="uav">3</div>内容生成</div></td><td class="mono" style="font-size:17px;">64</td><td><div class="scorebar"><i style="width:64%;background:linear-gradient(90deg,#7bb8ff,#3aa0ff)"></i></div></td><td class="mono">中</td><td class="mono">52%</td><td style="text-align:right;padding-right:20px;"><span class="tag acc">维持观察</span></td></tr>
+          <tr><td style="padding-left:20px;"><div class="uname"><div class="uav">4</div>数据分析</div></td><td class="mono" style="font-size:17px;">48</td><td><div class="scorebar"><i style="width:48%;background:#c7d8ef"></i></div></td><td class="mono">中</td><td class="mono">44%</td><td style="text-align:right;padding-right:20px;"><span class="tag acc">维持观察</span></td></tr>
+          <tr style="opacity:.62;"><td style="padding-left:20px;"><div class="uname"><div class="uav" style="background:#eef0f4;color:#9a9aa3;">5</div>闲聊 / 娱乐</div></td><td class="mono neg" style="font-size:17px;">23</td><td><div class="scorebar"><i style="width:23%;background:#e3a6a4"></i></div></td><td class="mono">低</td><td class="mono neg">—</td><td style="text-align:right;padding-right:20px;"><span class="tag" style="background:var(--neg-soft);color:var(--neg);">限流止损</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div></body></html>

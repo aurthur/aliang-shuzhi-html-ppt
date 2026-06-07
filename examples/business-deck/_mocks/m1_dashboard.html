@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="mock.css"></head>
+<body><div class="app">
+  <div class="tb">
+    <div class="lg">A</div><div class="nm">AI <b>Console</b></div>
+    <div class="tabs"><a class="on">总览</a><a>用量</a><a>收入</a><a>成本</a><a>场景</a></div>
+    <div class="sp"></div>
+    <div class="pill"><span class="dot" style="background:var(--pos)"></span>近 30 天</div>
+    <div class="pill">导出</div><div class="av"></div>
+  </div>
+  <div class="bd">
+    <div class="h1">用量 × 收入看板<span class="mu">同样的 token，钱花在哪、哪段赚回来 —— 一屏看清</span></div>
+    <div class="row">
+      <div class="card kpi"><div class="k">本月 AI 驱动营收</div><div class="v">¥1,284,560</div><div class="delta up">▲ 42.0% 环比</div></div>
+      <div class="card kpi"><div class="k">token 变现效率</div><div class="v">3.1<small>×</small></div><div class="delta up">▲ 2.0× → 3.1×</div></div>
+      <div class="card kpi"><div class="k">付费转化率</div><div class="v">6.8<small>%</small></div><div class="delta up">▲ 4.8pt</div></div>
+      <div class="card kpi"><div class="k">每千 token 成本</div><div class="v">¥0.83</div><div class="delta dn">▼ 35% 单位成本</div></div>
+    </div>
+    <div class="row" style="flex:1;min-height:0;">
+      <div class="card" style="flex:1.7;display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;"><div class="ct">营收 vs token 成本 · 按周</div>
+          <div class="legend" style="margin-left:auto;"><span><span class="dot" style="background:var(--acc)"></span>营收</span><span><span class="dot" style="background:#d2d4da"></span>token 成本</span></div></div>
+        <svg viewBox="0 0 640 250" style="width:100%;flex:1;margin-top:8px;" preserveAspectRatio="none">
+          <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0A84FF" stop-opacity=".22"/><stop offset="1" stop-color="#0A84FF" stop-opacity="0"/></linearGradient></defs>
+          <g stroke="#eef0f4" stroke-width="1"><line x1="0" y1="60" x2="640" y2="60"/><line x1="0" y1="120" x2="640" y2="120"/><line x1="0" y1="180" x2="640" y2="180"/><line x1="0" y1="240" x2="640" y2="240"/></g>
+          <path d="M0,210 L80,200 L160,182 L240,176 L320,150 L400,120 L480,96 L560,64 L640,44 L640,250 L0,250 Z" fill="url(#g1)"/>
+          <polyline points="0,210 80,200 160,182 240,176 320,150 400,120 480,96 560,64 640,44" fill="none" stroke="#0A84FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="0,220 80,216 160,212 240,206 320,202 400,196 480,192 560,188 640,184" fill="none" stroke="#d2d4da" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>
+          <g fill="#0A84FF"><circle cx="480" cy="96" r="4.5"/><circle cx="560" cy="64" r="4.5"/><circle cx="640" cy="44" r="5"/></g>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--gray2);font-weight:600;margin-top:4px;"><span>W1</span><span>W3</span><span>W5</span><span>W7</span><span>W9</span><span>本周</span></div>
+      </div>
+      <div class="card" style="flex:1;display:flex;flex-direction:column;">
+        <div class="ct">各场景收入贡献</div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:15px;margin-top:6px;">
+          <div><div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:6px;"><span>智能客服</span><span class="mono acc">¥486k</span></div><div class="scorebar"><i style="width:92%;background:linear-gradient(90deg,#3aa0ff,#0A84FF)"></i></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:6px;"><span>导购推荐</span><span class="mono acc">¥372k</span></div><div class="scorebar"><i style="width:71%;background:linear-gradient(90deg,#3aa0ff,#0A84FF)"></i></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:6px;"><span>内容生成</span><span class="mono acc">¥261k</span></div><div class="scorebar"><i style="width:50%;background:linear-gradient(90deg,#7bb8ff,#3aa0ff)"></i></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:6px;"><span>数据分析</span><span class="mono muted">¥165k</span></div><div class="scorebar"><i style="width:32%;background:#c7d8ef"></i></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></body></html>

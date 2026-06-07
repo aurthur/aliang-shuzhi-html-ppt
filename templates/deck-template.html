@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DECK TITLE · HTML Report Deck</title>
+<!-- ╔══ HOW TO USE ══════════════════════════════════════════════════════════╗
+     1) RE-BRAND: change --accent (+ -d/-soft/-line) and the cover/divider/closing
+        gradients. Keep neutrals/shadows/radius — that's the Apple base.
+     2) RE-CONTENT: replace the placeholder text. Each <section class="slide"> is one
+        named layout (see references/components.md). Add/remove slides freely.
+     3) Font is the system Apple stack (SF Pro + PingFang SC) — no web-font, offline-safe.
+     4) Rules: no emoji (use the SVG icon sprite), no left-vertical-bar cards, statements
+        are plain text not boxes, animation stays restrained. Lint with scripts/validate-deck.sh.
+     ╚════════════════════════════════════════════════════════════════════════╝ -->
+<style>
+  :root{
+    --accent:#0A84FF; --accent-d:#0060df; --accent-soft:#eaf3ff; --accent-line:#cfe2ff;
+    --pos:#1faa4b; --pos-soft:#e9f7ec; --neg:#e0322f; --neg-soft:#fdecec;
+    --warn:#F08A24; --warn-soft:#fdf0e2;
+    --ink:#1d1d1f; --gray:#6e6e73; --gray2:#86868b;
+    --bg:#f5f5f7; --card:#fff; --line:#e8e8ed; --hair:rgba(0,0,0,.06); --dark:#0b0b0e;
+    --sh1:0 1px 2px rgba(17,17,26,.035), 0 5px 16px rgba(17,17,26,.05);
+    --sh2:0 2px 6px rgba(17,17,26,.05), 0 14px 34px rgba(17,17,26,.07);
+    --sh3:0 4px 12px rgba(17,17,26,.06), 0 26px 56px rgba(17,17,26,.10);
+    /* Apple font: SF Pro (latin) + PingFang SC (中文). No Noto, no web-font link. */
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --fd:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;background:#000;font-family:var(--font);-webkit-font-smoothing:antialiased;}
+  body{overflow:hidden;}
+  #viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;}
+  .stage{position:absolute;top:50%;left:50%;width:1280px;height:720px;transform:translate(-50%,-50%);transform-origin:center;}
+  .slide{position:absolute;inset:0;background:#fff;display:none;overflow:hidden;color:var(--ink);}
+  .slide.active{display:block;animation:slideIn .5s cubic-bezier(.22,.68,.18,1);}
+  @keyframes slideIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+  svg.ic{display:inline-block;flex:none;}
+  /* header / footer */
+  .head{position:absolute;top:42px;left:72px;right:72px;display:flex;align-items:center;z-index:4;}
+  .kicker{display:inline-flex;align-items:center;gap:11px;font-size:12.5px;font-weight:600;color:var(--gray);}
+  .kicker .num{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 7px;background:var(--accent);color:#fff;border-radius:7px;font-size:12px;font-weight:600;}
+  .kicker .sep{color:#c4c4cc;}
+  .stitle{position:absolute;top:80px;left:72px;right:72px;font-family:var(--fd);font-size:40px;font-weight:700;color:var(--ink);letter-spacing:-.015em;line-height:1.1;}
+  .body{position:absolute;left:72px;right:72px;top:150px;bottom:56px;display:flex;flex-direction:column;justify-content:center;}
+  .foot{position:absolute;bottom:26px;left:72px;right:72px;display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--gray2);font-weight:500;z-index:4;}
+  .foot .bar{height:3px;flex:1;margin:0 18px;background:rgba(0,0,0,.07);border-radius:3px;position:relative;overflow:hidden;}
+  .foot .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:3px;}
+  /* primitives */
+  .lab{font-size:11.5px;font-weight:600;letter-spacing:.05em;color:var(--accent-d);text-transform:uppercase;display:flex;align-items:center;gap:7px;}
+  .lab svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .figure{font-family:var(--fd);font-size:64px;font-weight:800;line-height:1;letter-spacing:-.025em;color:var(--ink);font-variant-numeric:tabular-nums;}
+  .figure.up{color:var(--pos);} .figure.dn{color:var(--neg);} .figure.acc{color:var(--accent-d);}
+  /* statement (plain text, NOT a box) */
+  .statement{font-family:var(--fd);font-size:34px;font-weight:700;line-height:1.4;color:var(--ink);letter-spacing:-.015em;}
+  .statement em{font-style:normal;color:var(--accent);}
+  /* data-result */
+  .dgrid{display:flex;gap:20px;width:100%;height:100%;}
+  .hero{flex:1.55;background:#fafafc;border:1px solid var(--hair);border-radius:24px;padding:30px 32px;display:flex;flex-direction:column;justify-content:center;}
+  .focal{display:flex;gap:46px;align-items:flex-end;} .fcol .fl{font-size:14px;color:var(--gray);font-weight:600;margin-top:9px;}
+  .side{flex:1;display:flex;flex-direction:column;gap:18px;}
+  .scard{flex:1;background:#fafafc;border:1px solid var(--hair);border-radius:20px;padding:24px;display:flex;flex-direction:column;justify-content:center;}
+  .scard .big{font-family:var(--fd);font-size:32px;font-weight:800;color:var(--ink);margin-top:10px;letter-spacing:-.025em;} .scard .big.dn{color:var(--neg);}
+  .scard .d{font-size:13px;color:var(--gray);margin-top:8px;line-height:1.5;}
+  /* todo-featured */
+  .tgrid{display:flex;gap:18px;width:100%;height:100%;}
+  .tcol-l{flex:1.04;display:flex;} .tcol-r{flex:1;display:flex;flex-direction:column;gap:14px;}
+  .tcard{background:#fafafc;border:1px solid var(--hair);border-radius:18px;padding:20px 22px;display:flex;gap:14px;align-items:center;}
+  .tcol-r .tcard{flex:1;}
+  .tcard .tick{flex:none;width:44px;height:44px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;}
+  .tcard .tick svg{width:23px;height:23px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .tcard .tlead{font-size:16.5px;font-weight:600;color:var(--ink);} .tcard .tdesc{font-size:13px;color:var(--gray);margin-top:5px;line-height:1.5;}
+  .tcard.feat{flex:1;flex-direction:column;align-items:flex-start;justify-content:center;gap:0;padding:34px;border:none;color:#fff;background:linear-gradient(158deg,#0A84FF,#0060df);box-shadow:0 16px 40px rgba(10,132,255,.30);}
+  .tcard.feat .tick{width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.16);margin-bottom:22px;} .tcard.feat .tick svg{stroke:#fff;width:30px;height:30px;}
+  .tcard.feat .pri{display:inline-flex;align-items:center;font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.18);padding:5px 12px;border-radius:999px;}
+  .tcard.feat .tlead{font-family:var(--fd);font-size:25px;font-weight:700;color:#fff;line-height:1.3;margin-top:14px;} .tcard.feat .tdesc{font-size:14.5px;color:rgba(255,255,255,.82);margin-top:12px;line-height:1.6;}
+  /* cover / divider / closing (dark, the only places gradients live big) */
+  #cover{background:var(--dark);overflow:hidden;color:#fff;}
+  #cover .glow{position:absolute;width:560px;height:560px;right:-6%;top:-22%;border-radius:50%;background:radial-gradient(circle,rgba(10,132,255,.5),rgba(10,132,255,0) 62%);filter:blur(20px);}
+  #cover .clogo{position:absolute;top:58px;left:72px;display:flex;align-items:center;gap:13px;z-index:2;}
+  #cover .clogo .lg{width:44px;height:44px;border-radius:12px;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;}
+  #cover .cmain{position:absolute;left:72px;right:72px;top:50%;transform:translateY(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;}
+  #cover h1{font-family:var(--fd);font-size:84px;font-weight:900;line-height:1.12;margin-top:28px;letter-spacing:-.025em;}
+  #cover h1 em{font-style:normal;color:var(--accent);}
+  #cover .csub{color:rgba(255,255,255,.78);font-size:17px;font-weight:500;margin-top:32px;display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;z-index:2;}
+  #cover .csub .dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.4);}
+  .divider{background:var(--dark);color:#fff;overflow:hidden;} .slide.divider.active{display:flex;}
+  .divider .glow{position:absolute;width:520px;height:520px;left:62%;top:-18%;border-radius:50%;background:radial-gradient(circle,rgba(10,132,255,.42),rgba(10,132,255,0) 62%);filter:blur(20px);}
+  .divider .dwrap{display:flex;width:100%;align-items:center;padding:0 96px;z-index:2;}
+  .divider .dno{font-family:var(--fd);font-size:128px;font-weight:900;line-height:.95;color:var(--accent);margin-bottom:14px;}
+  .divider h2{font-family:var(--fd);font-size:40px;font-weight:700;line-height:1.28;max-width:620px;}
+  .closing{background:var(--dark);color:#fff;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;} .slide.closing.active{display:flex;}
+  .closing .glow{position:absolute;width:560px;height:560px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(10,132,255,.32),rgba(10,132,255,0) 62%);filter:blur(20px);}
+  .closing h2{position:relative;z-index:2;font-family:var(--fd);font-size:48px;font-weight:700;} .closing h2 em{font-style:normal;color:var(--accent);}
+  .closing p{position:relative;z-index:2;font-size:17px;opacity:.72;margin-top:26px;max-width:600px;line-height:2;}
+  /* nav chrome */
+  #nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;background:rgba(20,22,26,.66);border:1px solid rgba(255,255,255,.1);padding:7px 13px;border-radius:999px;backdrop-filter:blur(12px);z-index:50;opacity:.25;transition:opacity .25s;}
+  #nav:hover{opacity:1;} #nav button{background:none;border:none;color:#fff;font-size:17px;cursor:pointer;width:28px;height:28px;border-radius:50%;} #nav button:hover{background:rgba(255,255,255,.16);}
+  #nav .idx{color:#fff;font-size:12.5px;font-weight:600;min-width:52px;text-align:center;}
+  #topbar{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:60;transition:width .25s;}
+</style>
+</head>
+<body>
+<div id="topbar"></div>
+<div id="viewport"><div class="stage" id="stage">
+
+  <!-- Icon sprite (Lucide-style open-source line icons; add more <symbol>s as needed) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="i-trend" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></symbol>
+  </defs></svg>
+
+  <!-- 01 · cover -->
+  <section class="slide active" id="cover">
+    <div class="glow"></div>
+    <div class="clogo"><div class="lg">A</div><div><div style="font-size:18px;font-weight:600;">DECK TITLE</div><div style="font-size:11.5px;opacity:.6;letter-spacing:.16em;">SUBTITLE · TAG</div></div></div>
+    <div class="cmain">
+      <h1>One bold line,<br><em>the thing they remember</em></h1>
+      <div class="csub"><span>N slides</span><span class="dot"></span><span>one scene per slide</span><span class="dot"></span><span>pure HTML</span></div>
+    </div>
+  </section>
+
+  <!-- 02 · statement (plain text, no box) -->
+  <section class="slide" id="s-statement">
+    <div class="head"><span class="kicker"><span class="num">01</span> SECTION <span class="sep">·</span> stage-setting</span></div>
+    <div class="stitle">One sentence on what this is about</div>
+    <div class="body"><div class="statement">State the thesis in one line — let a single <em>brand-colored keyword</em><br>carry the emphasis. No box around it.</div></div>
+    <div class="foot"><span>DECK · footer</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 03 · data-result -->
+  <section class="slide" id="s-result">
+    <div class="head"><span class="kicker"><span class="num">02</span> SECTION <span class="sep">·</span> results first</span></div>
+    <div class="stitle">Lead with the result</div>
+    <div class="body"><div class="dgrid">
+      <div class="hero">
+        <div class="lab"><svg class="ic"><use href="#i-trend"/></svg> headline · counts up on entry</div>
+        <div class="focal" style="margin-top:16px;">
+          <div class="fcol"><div class="figure up">+<span data-to="42">0</span>%</div><div class="fl">primary metric</div></div>
+          <div class="fcol"><div class="figure acc"><span data-to="3.1" data-dec="1">0</span>×</div><div class="fl">flagship (one blue)</div></div>
+        </div>
+        <div style="font-size:14.5px;color:var(--gray);margin-top:18px;line-height:1.55;max-width:560px;">One-line takeaway — what the numbers mean, in plain words.</div>
+      </div>
+      <div class="side">
+        <div class="scard"><div class="lab" style="color:var(--gray2)">a metric down</div><div class="big dn">▼ <span data-to="35">0</span>%</div><div class="d">red = decrease; pair with ▼.</div></div>
+        <div class="scard"><div class="lab" style="color:var(--gray2)">a level metric</div><div class="big"><span data-to="100">0</span>%</div><div class="d">levels stay ink (no forced color).</div></div>
+      </div>
+    </div></div>
+    <div class="foot"><span>DECK · footer</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 04 · section-divider -->
+  <section class="slide divider" id="d1">
+    <div class="glow"></div>
+    <div class="dwrap"><div><div style="font-size:13px;font-weight:600;letter-spacing:.18em;opacity:.6;">CHAPTER · 01</div><div class="dno">01</div><h2>What's next,<br>and how it scales</h2></div></div>
+  </section>
+
+  <!-- 05 · todo-featured (one priority block + a list) -->
+  <section class="slide" id="s-todo">
+    <div class="head"><span class="kicker"><span class="num">03</span> SECTION <span class="sep">·</span> next steps</span></div>
+    <div class="stitle">Next · priority first</div>
+    <div class="body"><div class="tgrid">
+      <div class="tcol-l"><div class="tcard feat">
+        <div class="tick"><svg class="ic"><use href="#i-target"/></svg></div>
+        <span class="pri">◆ priority</span>
+        <div class="tlead">The one thing<br>that leads everything</div>
+        <div class="tdesc">A sentence on why this is the priority and what it unlocks.</div>
+      </div></div>
+      <div class="tcol-r">
+        <div class="tcard"><div class="tick"><svg class="ic"><use href="#i-users"/></svg></div><div><div class="tlead">Second item</div><div class="tdesc">one-line detail</div></div></div>
+        <div class="tcard"><div class="tick"><svg class="ic"><use href="#i-trend"/></svg></div><div><div class="tlead">Third item</div><div class="tdesc">one-line detail</div></div></div>
+        <div class="tcard"><div class="tick"><svg class="ic"><use href="#i-spark"/></svg></div><div><div class="tlead">Fourth item</div><div class="tdesc">one-line detail</div></div></div>
+      </div>
+    </div></div>
+    <div class="foot"><span>DECK · footer</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 06 · closing -->
+  <section class="slide closing" id="s-end">
+    <div class="glow"></div>
+    <h2>The closing line, <em>one keyword in brand</em></h2>
+    <p>One short sentence. Give it breathing room — generous space, short copy.</p>
+  </section>
+
+</div></div>
+
+<div id="nav">
+  <button id="prev" title="prev">‹</button>
+  <span class="idx"><span id="cur">1</span> / <span id="tot">1</span></span>
+  <button id="next" title="next">›</button>
+  <button id="fs" title="fullscreen">⛶</button>
+</div>
+
+<script>
+(function(){
+  var slides = [].slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length, i = 0;
+  var stage = document.getElementById('stage'), topbar = document.getElementById('topbar');
+  slides.forEach(function(s, idx){
+    var p = s.querySelector('.pageno'); if(p) p.textContent = String(idx+1).padStart(2,'0');
+    var b = s.querySelector('.bar i'); if(b) b.style.width = ((idx+1)/total*100)+'%';
+  });
+  document.getElementById('tot').textContent = total;
+  function pauseVideos(){ document.querySelectorAll('video').forEach(function(v){ try{v.pause();}catch(e){} }); }
+  function animateCounts(slide){
+    slide.querySelectorAll('[data-to]').forEach(function(el){
+      var to=parseFloat(el.getAttribute('data-to')), dec=(el.getAttribute('data-dec')||0)|0, dur=950, t0=null;
+      function step(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1); var e=0.5-Math.cos(Math.PI*p)/2;
+        el.textContent = dec? (to*e).toFixed(dec) : Math.round(to*e); if(p<1) requestAnimationFrame(step); }
+      requestAnimationFrame(step);
+    });
+  }
+  function show(n){
+    if(n<0)n=0; if(n>=total)n=total-1;
+    if(n!==i) pauseVideos();
+    slides[i].classList.remove('active'); i=n; slides[i].classList.add('active');
+    animateCounts(slides[i]);
+    document.getElementById('cur').textContent=i+1; topbar.style.width=((i+1)/total*100)+'%';
+  }
+  document.getElementById('next').onclick=function(){ show(i+1); };
+  document.getElementById('prev').onclick=function(){ show(i-1); };
+  document.getElementById('fs').onclick=function(){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();} };
+  document.addEventListener('keydown', function(e){
+    switch(e.key){
+      case 'ArrowRight': case 'PageDown': case ' ': e.preventDefault(); show(i+1); break;
+      case 'ArrowLeft': case 'PageUp': show(i-1); break;
+      case 'Home': show(0); break; case 'End': show(total-1); break;
+      case 'f': case 'F': document.getElementById('fs').click(); break;
+    }
+  });
+  function fit(){ var s=Math.min(window.innerWidth/1280, window.innerHeight/720); stage.style.transform='translate(-50%,-50%) scale('+s+')'; }
+  window.addEventListener('resize', fit); fit();
+  topbar.style.width=(1/total*100)+'%';
+})();
+</script>
+</body>
+</html>

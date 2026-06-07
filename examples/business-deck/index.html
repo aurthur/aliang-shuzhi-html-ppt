@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>述职 HTML 样板 · 黑白版 · 把 token 变成增长和收入</title>
+<style>
+  :root{
+    --accent:#0A84FF; --accent-d:#0060df; --accent-soft:#eaf3ff; --accent-line:#cfe2ff;
+    --pos:#1faa4b; --pos-soft:#e9f7ec; --neg:#e0322f; --neg-soft:#fdecec;
+    --warn:#F08A24; --warn-soft:#fdf0e2; --warn-d:#b3660f;
+    --ink:#1d1d1f; --gray:#6e6e73; --gray2:#86868b;
+    --bg:#f5f5f7; --card:#ffffff; --line:#e8e8ed; --line2:#eeeef1; --hair:rgba(0,0,0,.06);
+    --dark:#0b0b0e;
+    --sh1:0 1px 2px rgba(17,17,26,.035), 0 5px 16px rgba(17,17,26,.05);
+    --sh2:0 2px 6px rgba(17,17,26,.05), 0 14px 34px rgba(17,17,26,.07);
+    --sh3:0 4px 12px rgba(17,17,26,.06), 0 26px 56px rgba(17,17,26,.10);
+    /* 苹果官网字体：拉丁 SF Pro（-apple-system）+ 中文苹方 PingFang SC */
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --fd:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; background:#000; font-family:var(--font); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;}
+  body{overflow:hidden;}
+  #viewport{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000;}
+  .stage{position:absolute; top:50%; left:50%; width:1280px; height:720px; transform:translate(-50%,-50%); transform-origin:center;}
+  .slide{position:absolute; inset:0; background:#ffffff; display:none; overflow:hidden; color:var(--ink);}
+  .slide.active{display:block; animation:slideIn .5s cubic-bezier(.22,.68,.18,1);}
+  @keyframes slideIn{from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);}}
+  svg.ic{display:inline-block; flex:none;}
+
+  .head{position:absolute; top:42px; left:72px; right:72px; display:flex; align-items:center; justify-content:space-between; z-index:4;}
+  .kicker{display:inline-flex; align-items:center; gap:11px; font-size:12.5px; font-weight:600; color:var(--gray);}
+  .kicker .num{display:inline-flex; align-items:center; justify-content:center; min-width:24px; height:24px; padding:0 7px; background:var(--accent); color:#fff; border-radius:7px; font-size:12px; font-weight:600;}
+  .kicker .sep{color:#c4c4cc;}
+  .stitle{position:absolute; top:80px; left:72px; right:72px; font-family:var(--fd); font-size:40px; font-weight:700; color:var(--ink); letter-spacing:-.015em; line-height:1.1;}
+  .body{position:absolute; left:72px; right:72px; top:150px; bottom:56px; display:flex; flex-direction:column; justify-content:center;}
+  .foot{position:absolute; bottom:26px; left:72px; right:72px; display:flex; align-items:center; justify-content:space-between; font-size:11.5px; color:var(--gray2); font-weight:500; z-index:4;}
+  .foot .bar{height:3px; flex:1; margin:0 18px; background:rgba(0,0,0,.07); border-radius:3px; position:relative; overflow:hidden;}
+  .foot .bar i{position:absolute; left:0; top:0; bottom:0; background:var(--accent); border-radius:3px;}
+
+  .lab{font-size:11.5px; font-weight:600; letter-spacing:.05em; color:var(--accent-d); text-transform:uppercase; display:flex; align-items:center; gap:7px;}
+  .lab svg{width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+  .lab.n{color:var(--gray2);}
+  .figure{font-family:var(--fd); font-size:64px; font-weight:800; line-height:1; letter-spacing:-.025em; color:var(--ink); font-variant-numeric:tabular-nums;}
+  .figure small{font-size:21px; font-weight:600; color:var(--gray);}
+  .em-b{color:var(--accent-d);} .muted{color:var(--gray);}
+  /* 数字增减统一配色：增=绿 减=红，旗舰指标=蓝 */
+  .figure.up,.scard .big.up,.mini .mv.up{color:var(--pos);}
+  .figure.dn,.scard .big.dn,.mini .mv.dn{color:var(--neg);}
+  .figure.acc{color:var(--accent-d);}
+  b,strong{font-weight:600;}
+  .chip{display:inline-flex; align-items:center; gap:6px; padding:6px 13px; border-radius:999px; font-size:13px; font-weight:600; background:var(--accent-soft); color:var(--accent-d);}
+
+  .dgrid{display:flex; gap:20px; width:100%; height:100%;}
+  .hero{flex:1.55; background:#fafafc; border:1px solid var(--hair); border-radius:24px; padding:30px 32px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden;}
+  .hero::after{content:""; position:absolute; right:-100px; top:-100px; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle, rgba(10,132,255,.1), rgba(10,132,255,0) 68%);}
+  .hero > *{position:relative;}
+  .hero .focal{display:flex; gap:46px; align-items:flex-end;}
+  .hero .fcol .fl{font-size:14px; color:var(--gray); font-weight:600; margin-top:9px;}
+  .hero .sub{font-size:14.5px; color:var(--gray); margin-top:18px; line-height:1.55; max-width:560px;}
+  .side{flex:1; display:flex; flex-direction:column; gap:18px;}
+  .scard{flex:1; background:#fafafc; border:1px solid var(--hair); border-radius:20px; padding:24px; display:flex; flex-direction:column; justify-content:center;}
+  .scard .big{font-family:var(--fd); font-size:32px; font-weight:800; color:var(--ink); margin-top:10px; letter-spacing:-.025em;}
+  .scard .big small{font-size:15px; color:var(--gray); font-weight:600;}
+  .scard .d{font-size:13px; color:var(--gray); margin-top:8px; line-height:1.5;}
+  .mini{display:flex; margin-top:24px; border-top:1px solid var(--hair); padding-top:18px;}
+  .mini .m{flex:1;} .mini .m + .m{border-left:1px solid var(--hair); padding-left:18px;}
+  .mini .mv{font-family:var(--fd); font-size:26px; font-weight:800; color:var(--ink); letter-spacing:-.02em;}
+  .mini .mv.p{color:var(--pos);}
+  .mini .mk{font-size:12px; color:var(--gray2); margin-top:5px;}
+
+  .two{display:flex; gap:20px; width:100%; height:100%;}
+  .panel{background:#fafafc; border:1px solid var(--hair); border-radius:20px; padding:22px 24px;}
+  .hl{background:var(--ink); color:#fff; border-radius:22px; padding:26px 30px; box-shadow:var(--sh2);}
+  .hl .t{font-size:21px; font-weight:600; line-height:1.45;} .hl .s{font-size:14px; opacity:.78; margin-top:10px; line-height:1.55;}
+  .biglead{font-family:var(--fd); font-size:30px; font-weight:700; line-height:1.4; color:var(--ink); letter-spacing:-.015em;}
+  .biglead em{font-style:normal; color:var(--accent);}
+  /* 背景页（开场，重要）：加蓝色氛围光 + 三卡语义配色，别太素 */
+  #s-bg .body{z-index:1;}
+  #s-bg .biglead{font-size:34px; line-height:1.42;}
+  #s-bg .bgglow{position:absolute; right:-30px; top:54px; width:560px; height:470px; border-radius:50%; background:radial-gradient(closest-side, rgba(10,132,255,.17), rgba(10,132,255,.05) 56%, transparent 78%); filter:blur(46px); z-index:0;}
+  .ctx{display:flex; gap:16px; margin-top:24px;}
+  .ctx .cx{position:relative; overflow:hidden; flex:1; background:#fafafc; border:1px solid var(--hair); border-radius:18px; padding:20px 22px;}
+  .ctx .cx .cn{width:34px; height:34px; border-radius:10px; background:var(--ink); color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:15px; margin-bottom:13px;}
+  .ctx .cx h4{font-size:16px; font-weight:600; color:var(--ink); margin-bottom:7px;} .ctx .cx p{font-size:13px; color:var(--gray); line-height:1.55;} .ctx .cx p b{color:var(--ink); font-weight:700;}
+  /* 全页只有"目标"卡用品牌蓝高亮 —— 单一焦点，不花 */
+  .ctx .cx.key{background:linear-gradient(180deg,#edf4ff,#fff 78%); border-color:var(--accent-line); box-shadow:0 10px 26px rgba(10,132,255,.10);}
+  .ctx .cx.key .cn{background:var(--accent);} .ctx .cx.key h4{color:var(--accent-d);} .ctx .cx.key p b{color:var(--accent-d);}
+  .ctx .cx.key::after{content:"主线"; position:absolute; top:17px; right:16px; font-size:11px; font-weight:700; color:var(--accent-d); background:#fff; border:1px solid var(--accent-line); padding:3px 10px; border-radius:999px;}
+
+  .combo{display:flex; align-items:stretch; gap:0; width:100%;}
+  .combo .lv{flex:1; background:linear-gradient(180deg,#f2f8ff,#fff 70%); border:1px solid var(--accent-line); border-radius:18px; padding:22px 18px 20px; text-align:center; position:relative;}
+  .combo .lv .ln{position:absolute; top:14px; right:16px; font-family:var(--fd); font-size:12px; font-weight:800; color:#bcd6f8;}
+  .combo .x{display:flex; align-items:center; font-family:var(--fd); font-size:26px; font-weight:700; color:var(--accent); opacity:.45; padding:0 12px;}
+  .combo .lv .li{width:50px; height:50px; border-radius:15px; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(140deg,#0A84FF,#0060df); box-shadow:0 6px 16px rgba(10,132,255,.28);}
+  .combo .lv .li svg{width:24px; height:24px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+  .combo .lv h4{font-size:17px; font-weight:700; color:var(--ink);} .combo .lv p{font-size:12.5px; color:var(--gray); margin-top:6px; line-height:1.5;}
+  .combolead{margin-bottom:30px; font-family:var(--fd); font-size:24px; font-weight:700; color:var(--ink); letter-spacing:-.01em; line-height:1.4;}
+  .combolead b{color:var(--accent-d); font-weight:800;}
+
+  .hypo{display:flex; flex-direction:column; gap:28px; width:100%;}
+  /* 正文标题/副标题左移对齐漏斗条（漏斗左侧有 96px 标签列 + 16px 间距）—— 否则标题会比图表往左戳出去，看着怪 */
+  .hypolead{margin-left:112px; font-family:var(--fd); font-size:23px; font-weight:700; line-height:1.45; color:var(--ink); letter-spacing:-.01em;}
+  .hypolead b{color:var(--accent-d);}
+  .hypolead .s{display:block; font-family:var(--font); font-size:14px; font-weight:400; color:var(--gray); margin-top:10px; line-height:1.6;}
+  .funnel{display:flex; flex-direction:column; gap:11px;}
+  .funnel .fr{display:flex; align-items:center; gap:16px; animation:fbarIn .5s cubic-bezier(.2,.7,.2,1) both;}
+  @keyframes fbarIn{from{opacity:0; transform:translateX(-26px);} to{opacity:1; transform:translateX(0);}}
+  .funnel .fr:nth-child(1){animation-delay:.05s;} .funnel .fr:nth-child(2){animation-delay:.16s;} .funnel .fr:nth-child(3){animation-delay:.27s;} .funnel .fr:nth-child(4){animation-delay:.38s;}
+  .funnel .fbar{height:54px; border-radius:12px; display:flex; align-items:center; padding:0 18px; color:#fff; font-weight:600; font-size:15px;}
+  .funnel .fr .fn{font-size:13px; color:var(--gray); width:96px; text-align:right; flex:none;}
+  .funnel .fr.bottleneck .fbar{box-shadow:0 0 0 3px var(--warn-soft), 0 10px 26px rgba(240,138,36,.28); animation:pulseb 2s ease-in-out .9s infinite;}
+  @keyframes pulseb{0%,100%{box-shadow:0 0 0 3px var(--warn-soft), 0 6px 18px rgba(240,138,36,.18);}50%{box-shadow:0 0 0 6px var(--warn-soft), 0 12px 30px rgba(240,138,36,.36);}}
+  .funnel .fr .ftag{font-size:12px; font-weight:700; color:var(--warn-d); margin-left:4px;}
+
+  .meta-wrap{display:flex; gap:30px; width:100%; height:100%; align-items:center;}
+  .ring{position:relative; width:454px; height:450px; flex:none;}
+  .ring svg.dial{position:absolute; inset:0; overflow:visible;}
+  .ring .dash{animation:flow 6s linear infinite;} @keyframes flow{to{stroke-dashoffset:-176;}}
+  .orbit{position:absolute; inset:0; transform-origin:227px 225px; animation:orbit 10s linear infinite;} @keyframes orbit{to{transform:rotate(360deg);}}
+  .orbit .arrow{position:absolute; left:227px; top:50px; width:0; height:0; margin:-10px 0 0 -8px; border-top:10px solid transparent; border-bottom:10px solid transparent; border-left:18px solid var(--accent); filter:drop-shadow(0 0 7px rgba(10,132,255,.6));}
+  .ring .center{position:absolute; left:227px; top:225px; transform:translate(-50%,-50%); width:152px; height:152px; border-radius:50%; background:linear-gradient(158deg,#3aa0ff,#0A84FF 55%,#0060df); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; box-shadow:0 16px 40px rgba(10,132,255,.42);}
+  .ring .center .cyc{width:30px; height:30px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; animation:spin 8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .ring .center .ct{font-size:17px; font-weight:700; margin-top:6px; font-family:var(--fd);} .ring .center .cs{font-size:10.5px; opacity:.7; margin-top:2px;}
+  .ring .node{position:absolute; width:120px; transform:translate(-50%,-50%); background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:11px 8px 10px; text-align:center; box-shadow:var(--sh1); --glow:rgba(10,132,255,.22); animation:pass 10s linear infinite;}
+  @keyframes pass{0%{transform:translate(-50%,-50%) scale(1.08); box-shadow:0 0 0 5px var(--glow), var(--sh2); border-color:var(--accent);} 13%{transform:translate(-50%,-50%) scale(1); box-shadow:var(--sh1); border-color:var(--line);} 100%{transform:translate(-50%,-50%) scale(1); box-shadow:var(--sh1);}}
+  .ring .node .nn{display:inline-flex; width:21px; height:21px; border-radius:50%; background:var(--ink); color:#fff; font-size:11.5px; font-weight:700; align-items:center; justify-content:center; margin-bottom:6px;}
+  .ring .node .nt{font-size:13px; font-weight:600; color:var(--ink); line-height:1.25;}
+  .meta-right{flex:1; display:flex; flex-direction:column; gap:22px;}
+  .goalbig .lab{margin-bottom:15px;} .goalbig p{font-family:var(--fd); font-size:24px; line-height:1.5; color:var(--ink); font-weight:600; letter-spacing:-.008em;} .goalbig p b{color:var(--accent-d); font-weight:800;}
+  .hyps{display:flex; flex-direction:column; gap:11px;} .hyp{display:flex; align-items:baseline; gap:11px;}
+  .hyp .hn{font-size:11px; font-weight:700; color:#fff; background:var(--accent); padding:2px 9px; border-radius:6px; flex:none;} .hyp .ht{font-size:13px; line-height:1.5; color:var(--gray);} .hyp .ht b{color:var(--ink);}
+
+  .ucard{background:#fafafc; border:1px solid var(--hair); border-radius:22px; padding:22px 24px; width:100%; height:100%; display:flex; flex-direction:column;}
+  .steps{display:flex; gap:10px; flex:none;}
+  .steps .st{flex:1; background:#fff; border:1px solid var(--hair); border-radius:12px; padding:11px 14px; display:flex; align-items:center; gap:9px; transition:.25s;}
+  .steps .st svg{width:17px; height:17px; stroke:var(--accent); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:none;}
+  .steps .st.on{background:var(--ink); border-color:var(--ink);}
+  .steps .st.on svg{stroke:#5ea8ff;}
+  .steps .st .stt{font-size:13.5px; font-weight:600; color:var(--ink);} .steps .st.on .stt{color:#fff;}
+  .carousel{flex:1; min-height:0; margin-top:16px; position:relative; display:flex; flex-direction:column;}
+  .cstage{flex:1; min-height:0; position:relative;}
+  .cpanel{position:absolute; inset:0; display:flex; gap:20px; opacity:0; visibility:hidden; transform:translateX(16px); transition:opacity .35s, transform .35s;}
+  .cpanel.on{opacity:1; visibility:visible; transform:none;}
+  .cpanel .cimg{flex:1.5; min-width:0; border-radius:16px; overflow:hidden; display:flex; box-shadow:var(--sh2); border:1px solid var(--line); background:#fff;}
+  .cpanel .cimg img{width:100%; height:100%; object-fit:cover; object-position:left top; display:block;}
+  .cpanel .ctext{flex:1; display:flex; flex-direction:column; justify-content:center;}
+  .cpanel .ctext .cbadge{display:inline-flex; align-self:flex-start; font-size:12px; font-weight:700; color:#fff; background:var(--accent); padding:5px 12px; border-radius:999px; margin-bottom:14px;}
+  .cpanel .ctext h3{font-family:var(--fd); font-size:28px; font-weight:700; color:var(--ink); line-height:1.32;} .cpanel .ctext p{font-size:16.5px; color:var(--gray); margin-top:15px; line-height:1.6;}
+  .cnav{flex:none; display:flex; align-items:center; gap:10px; margin-top:14px;}
+  .cdots{display:flex; gap:7px;} .cdot{width:8px; height:8px; border-radius:50%; background:#d6d6dc; cursor:pointer; transition:.2s;} .cdot.on{background:var(--accent); width:22px; border-radius:5px;}
+  .chint{font-size:12.5px; color:var(--accent-d); font-weight:600; margin-left:auto; display:flex; align-items:center; gap:6px;}
+  .chint .k{display:inline-flex; align-items:center; justify-content:center; min-width:22px; height:22px; padding:0 6px; border-radius:6px; background:var(--accent-soft); animation:kbeat 1.4s ease-in-out infinite;}
+  @keyframes kbeat{0%,100%{transform:translateX(0); opacity:.7;}50%{transform:translateX(3px); opacity:1;}}
+
+  /* To-Do：左侧"优先"大块 + 右侧三条 —— 制造层级，不再四块平均 */
+  .tgrid{display:flex; gap:18px; width:100%; height:100%;}
+  .tcol-l{flex:1.04; display:flex;}
+  .tcol-r{flex:1; display:flex; flex-direction:column; gap:14px;}
+  .tcard{background:#fafafc; border:1px solid var(--hair); border-radius:18px; padding:20px 22px; display:flex; gap:14px; align-items:center;}
+  .tcol-r .tcard{flex:1;}
+  .tcard .tick{flex:none; width:44px; height:44px; border-radius:12px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center;}
+  .tcard .tick svg{width:23px; height:23px; stroke:var(--accent); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+  .tcard .tlead{font-size:16.5px; font-weight:600; color:var(--ink); letter-spacing:-.01em;}
+  .tcard .tdesc{font-size:13px; color:var(--gray); margin-top:5px; line-height:1.5;}
+  .pri{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:#fff; background:rgba(255,255,255,.18); padding:5px 12px; border-radius:999px;}
+  /* 左侧主推大块 */
+  .tcard.feat{flex:1; flex-direction:column; align-items:flex-start; justify-content:center; gap:0; padding:34px; border:none; color:#fff; background:linear-gradient(158deg,#0A84FF,#0060df); box-shadow:0 16px 40px rgba(10,132,255,.30); position:relative; overflow:hidden;}
+  .tcard.feat::after{content:""; position:absolute; right:-70px; bottom:-70px; width:230px; height:230px; border-radius:50%; background:radial-gradient(circle,rgba(255,255,255,.16),transparent 68%);}
+  .tcard.feat > *{position:relative; z-index:1;}
+  .tcard.feat .tick{width:56px; height:56px; border-radius:16px; background:rgba(255,255,255,.16); margin-bottom:22px;}
+  .tcard.feat .tick svg{width:30px; height:30px; stroke:#fff;}
+  .tcard.feat .tlead{font-family:var(--fd); font-size:25px; font-weight:700; color:#fff; line-height:1.3; margin-top:14px;}
+  .tcard.feat .tdesc{font-size:14.5px; color:rgba(255,255,255,.82); margin-top:12px; line-height:1.6;}
+
+  /* 手段页：一句话方法（纯文字）+ 三步清单 + 两张真实后台截图（叠放） */
+  .means{display:flex; gap:40px; width:100%; height:100%; align-items:center;}
+  .means-l{flex:1; display:flex; flex-direction:column; gap:24px;}
+  .mlead{font-family:var(--fd); font-size:23px; font-weight:700; line-height:1.45; color:var(--ink); letter-spacing:-.01em;}
+  .mlead b{color:var(--accent-d);}
+  .mlead .s{display:block; font-family:var(--font); font-size:14px; font-weight:400; color:var(--gray); margin-top:11px; line-height:1.6;}
+  .mlist{display:flex; flex-direction:column; gap:16px;}
+  .mstep{display:flex; align-items:flex-start; gap:13px;}
+  .mstep .mn{width:26px; height:26px; border-radius:8px; background:var(--accent); color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; flex:none; margin-top:1px;}
+  .mstep .mt{font-size:15px; font-weight:500; color:#3a3a3e; line-height:1.5;} .mstep .mt b{color:var(--accent-d); font-weight:700;}
+  .means-r{flex:1.18; position:relative; height:100%;}
+  .means-r .shot{position:absolute; border-radius:12px; border:1px solid var(--line); overflow:hidden; background:#fff;}
+  .means-r .shot img{width:100%; display:block;}
+  .means-r .shot.a{width:80%; right:0; top:9%; box-shadow:var(--sh3); z-index:1;}
+  .means-r .shot.b{width:58%; left:0; bottom:7%; box-shadow:0 10px 30px rgba(17,17,26,.18); z-index:2;}
+  /* 视频页：左侧主推大块 + 右侧两个小块，真实封面图 */
+  .vids{display:flex; gap:20px; width:100%; height:100%;}
+  .vfeat{flex:1.55; display:flex; flex-direction:column;}
+  .vside{flex:1; display:flex; flex-direction:column; gap:18px;}
+  .vsm{flex:1; display:flex; flex-direction:column; min-height:0;}
+  .vcard{position:relative; flex:1; min-height:0; border-radius:16px; overflow:hidden; background:#000; box-shadow:var(--sh2); border:1px solid var(--line);}
+  .vfeat .vcard{border:1.5px solid var(--accent-line); box-shadow:0 10px 30px rgba(10,132,255,.16);}
+  .vcard video{width:100%; height:100%; object-fit:cover; display:block;}
+  .vbadge{position:absolute; top:13px; left:13px; z-index:3; display:inline-flex; align-items:center; gap:6px; background:var(--accent); color:#fff; font-size:12px; font-weight:700; padding:5px 12px; border-radius:999px; box-shadow:0 5px 14px rgba(10,132,255,.45);}
+  .vmeta{display:flex; align-items:baseline; gap:9px; margin-top:12px; flex:none;}
+  .vmeta .vt{font-size:14.5px; font-weight:700; color:var(--ink);}
+  .vmeta .vd{font-size:12px; color:var(--gray2); font-weight:600;}
+  .vsm .vmeta{margin-top:10px;} .vsm .vt{font-size:13px;}
+
+  #cover{background:var(--dark); overflow:hidden; color:#fff;}
+  #cover .glow{position:absolute; width:560px; height:560px; right:-6%; top:-22%; border-radius:50%; background:radial-gradient(circle, rgba(10,132,255,.5), rgba(10,132,255,0) 62%); filter:blur(20px);}
+  #cover .grid{position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px); background-size:52px 52px; mask-image:radial-gradient(closest-side at 70% 28%, #000, transparent);}
+  #cover .clogo{position:absolute; top:58px; left:72px; display:flex; align-items:center; gap:13px; z-index:2;}
+  #cover .clogo .lg{width:44px; height:44px; border-radius:12px; background:#fff; color:var(--ink); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px;}
+  #cover .clogo .t1{font-size:18px; font-weight:600;} #cover .clogo .t2{font-size:11.5px; font-weight:500; opacity:.6; letter-spacing:.16em;}
+  #cover .cmain{position:absolute; left:72px; right:72px; top:50%; transform:translateY(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; text-align:center;}
+  #cover .ctag{display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); padding:8px 17px; border-radius:999px; font-size:13.5px; font-weight:600;}
+  #cover h1{font-family:var(--fd); font-size:86px; font-weight:900; line-height:1.12; margin-top:30px; letter-spacing:-.025em;}
+  #cover h1 .yr{font-family:var(--fd); display:block; font-size:19px; font-weight:500; opacity:.6; letter-spacing:.16em; margin-bottom:18px;}
+  #cover h1 em{font-style:normal; color:var(--accent);}
+  #cover .csub{color:rgba(255,255,255,.78); font-size:17px; font-weight:500; margin-top:34px; display:flex; align-items:center; justify-content:center; gap:15px; flex-wrap:wrap; z-index:2;}
+  #cover .csub .dot{width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.4);}
+
+  .divider{background:var(--dark); color:#fff; overflow:hidden;}
+  .slide.divider.active{display:flex;}
+  .divider .glow{position:absolute; width:520px; height:520px; left:62%; top:-18%; border-radius:50%; background:radial-gradient(circle, rgba(10,132,255,.42), rgba(10,132,255,0) 62%); filter:blur(20px);}
+  .divider .dgrid2{display:flex; width:100%; align-items:center; padding:0 96px; z-index:2;}
+  .divider .left{flex:1.25;}
+  .divider .left .deye{font-size:13px; font-weight:600; letter-spacing:.18em; opacity:.6; text-transform:uppercase;}
+  .divider .left .dno{font-family:var(--fd); font-size:128px; font-weight:900; line-height:.95; margin:6px 0 14px; color:var(--accent);}
+  .divider .left h2{font-family:var(--fd); font-size:40px; font-weight:700; line-height:1.28; max-width:560px;}
+  .divider .left .dtags{display:flex; gap:9px; margin-top:22px;} .divider .left .dtags span{font-size:12.5px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); padding:6px 14px; border-radius:999px;}
+  .divider .right{flex:.85; display:flex; flex-direction:column; gap:11px; border-left:1px solid rgba(255,255,255,.14); padding-left:48px;}
+  .divider .agi{display:flex; align-items:center; gap:13px; opacity:.4;} .divider .agi.cur{opacity:1;}
+  .divider .agi .an{font-family:var(--fd); font-size:15px; font-weight:700; width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,.12); display:flex; align-items:center; justify-content:center;} .divider .agi.cur .an{background:var(--accent);}
+  .divider .agi .at{font-size:15px; font-weight:500;} .divider .agi.cur .at{font-weight:700;}
+
+  .closing{background:var(--dark); color:#fff; flex-direction:column; align-items:center; justify-content:center; text-align:center; overflow:hidden;}
+  .slide.closing.active{display:flex;}
+  .closing .glow{position:absolute; width:560px; height:560px; left:50%; top:50%; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(circle, rgba(10,132,255,.32), rgba(10,132,255,0) 62%); filter:blur(20px);}
+  .closing .lg{position:relative; z-index:2; width:60px; height:60px; border-radius:16px; background:#fff; color:var(--ink); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px;}
+  .closing h2{position:relative; z-index:2; font-family:var(--fd); font-size:48px; font-weight:700; margin-top:34px;}
+  .closing h2 em{font-style:normal; color:var(--accent);}
+  .closing p{position:relative; z-index:2; font-size:17px; opacity:.72; margin-top:26px; max-width:600px; line-height:2; font-weight:400;}
+  .closing .tags{position:relative; z-index:2; display:flex; gap:14px; margin-top:46px; flex-wrap:wrap; justify-content:center; max-width:760px;} .closing .tags span{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); padding:9px 18px; border-radius:999px; font-size:13px; opacity:.9;}
+
+  #nav{position:fixed; bottom:18px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:12px; background:rgba(20,22,26,.66); border:1px solid rgba(255,255,255,.1); padding:7px 13px; border-radius:999px; backdrop-filter:blur(12px); z-index:50; opacity:.25; transition:opacity .25s;}
+  #nav:hover{opacity:1;} #nav button{background:none; border:none; color:#fff; font-size:17px; cursor:pointer; width:28px; height:28px; border-radius:50%;} #nav button:hover{background:rgba(255,255,255,.16);}
+  #nav .idx{color:#fff; font-size:12.5px; font-weight:600; min-width:52px; text-align:center;}
+  #topbar{position:fixed; top:0; left:0; height:3px; background:var(--accent); z-index:60; transition:width .25s;}
+  .hint{position:fixed; top:13px; right:18px; color:rgba(255,255,255,.4); font-size:11.5px; z-index:50;}
+</style>
+</head>
+<body>
+<div id="topbar"></div>
+<div class="hint">← / → 翻页 · F 全屏</div>
+<div id="viewport"><div class="stage" id="stage">
+
+  <!-- 图标库（Lucide 开源图标，SVG symbol 复用） -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></symbol>
+    <symbol id="i-coins" viewBox="0 0 24 24"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></symbol>
+    <symbol id="i-cycle" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24"><path d="m15.5 12.9 1.5 8.6-5-3-5 3 1.5-8.6"/><circle cx="12" cy="8" r="6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+    <symbol id="i-dashboard" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></symbol>
+    <symbol id="i-video" viewBox="0 0 24 24"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-bar" viewBox="0 0 24 24"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></symbol>
+  </defs></svg>
+
+  <!-- 封面 -->
+  <section class="slide active" id="cover">
+    <div class="glow"></div>
+    <div class="grid"></div>
+    <div class="clogo"><div class="lg">述</div><div><div class="t1">述职 · HTML 样板</div><div class="t2">BUSINESS · BLACK&WHITE</div></div></div>
+    <div class="cmain">
+      <span class="ctag">◆ AI 业务增长 · 黑白主题</span>
+      <h1><span class="yr">年 度 述 职 · 业 务 向</span>把 token，<br><em>变成增长和收入</em></h1>
+      <div class="csub"><span>13 页样板</span><span class="dot"></span><span>每页对应一个常见述职场景</span><span class="dot"></span><span>纯 HTML · 可投屏 · 可录屏</span></div>
+    </div>
+  </section>
+
+  <!-- 02 背景 -->
+  <section class="slide" id="s-bg">
+    <div class="bgglow"></div>
+    <div class="head"><span class="kicker"><span class="num">01</span> 场景 <span class="sep">·</span> 开场，先交代背景</span></div>
+    <div class="stitle">先用一句话，交代我在做什么</div>
+    <div class="body">
+      <div class="biglead">我负责把公司的 <em>AI 能力变成业务增长</em>；今年的主线只有一个 ——<br>让烧出去的 <em>token，真的换回收入</em>。</div>
+      <div class="ctx">
+        <div class="cx"><div class="cn">起</div><h4>起点</h4><p>AI 能力够强，但大多停在"好玩"，<b>没变成钱</b>。</p></div>
+        <div class="cx"><div class="cn">限</div><h4>约束</h4><p>token 成本不能失控，<b>ROI 必须为正</b>。</p></div>
+        <div class="cx key"><div class="cn">的</div><h4>目标</h4><p>跑通 <b>token → 收入</b> 的闭环，能复制。</p></div>
+      </div>
+    </div>
+    <div class="foot"><span>述职 · HTML 样板 · 黑白版</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 03 结果 -->
+  <section class="slide" id="s-result">
+    <div class="head"><span class="kicker"><span class="num">02</span> 场景 <span class="sep">·</span> 开门见山，先晒结果</span></div>
+    <div class="stitle">不绕弯子，先把结果摆出来</div>
+    <div class="body"><div class="dgrid">
+      <div class="hero">
+        <div class="lab"><svg class="ic"><use href="#i-trend"/></svg> 核心结果 · 进场时数字会滚动</div>
+        <div class="focal">
+          <div class="fcol"><div class="figure up">+<span data-to="42">0</span>%</div><div class="fl">AI 驱动营收</div></div>
+          <div class="fcol"><div class="figure acc"><span data-to="3.1" data-dec="1">0</span>×</div><div class="fl">token 变现效率</div></div>
+        </div>
+        <div class="sub">同样的 token，<b class="em-b">营收涨、单位成本降</b> —— 把"烧 token"变成了"赚收入"。下面讲是怎么做到的。</div>
+        <div class="mini">
+          <div class="m"><div class="mv up">▲ <span data-to="6.8" data-dec="1">0</span>%</div><div class="mk">付费转化（2.0% → 6.8%）</div></div>
+          <div class="m"><div class="mv up">▲ <span data-to="28">0</span>%</div><div class="mk">ARPU</div></div>
+          <div class="m"><div class="mv"><span data-to="61">0</span>%</div><div class="mk">毛利率</div></div>
+        </div>
+      </div>
+      <div class="side">
+        <div class="scard"><div class="lab n"><svg class="ic"><use href="#i-coins"/></svg> 单位成本</div><div class="big dn">▼ <span data-to="35">0</span>%</div><div class="d">每千 token 的成本，砍掉三分之一。</div></div>
+        <div class="scard"><div class="lab n"><svg class="ic"><use href="#i-copy"/></svg> 可复制</div><div class="big"><span data-to="100">0</span>%</div><div class="d">打法已沉淀成 SOP，可交接、可复用。</div></div>
+      </div>
+    </div></div>
+    <div class="foot"><span>述职 · HTML 样板 · 黑白版</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 转场 01 -->
+  <section class="slide divider" id="d1">
+    <div class="glow"></div>
+    <div class="dgrid2">
+      <div class="left"><div class="deye">第一章 · 01</div><div class="dno">01</div><h2>这些收入，<br>是怎么"换"出来的</h2><div class="dtags"><span>组合拳</span><span>思考假设</span><span>业务模型</span></div></div>
+      <div class="right">
+        <div class="agi cur"><span class="an">1</span><span class="at">我是怎么做到的</span></div>
+        <div class="agi"><span class="an">2</span><span class="at">接下来怎么打</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 组合拳 -->
+  <section class="slide" id="s-combo">
+    <div class="head"><span class="kicker"><span class="num">03</span> 场景 <span class="sep">·</span> 讲清楚背后的"组合拳"</span></div>
+    <div class="stitle">不是堆模型，是四个杠杆联动</div>
+    <div class="body">
+      <div class="combolead">四个杠杆<b>相乘</b>，不是相加 —— 让每一份 token 都花在能赚钱的地方。</div>
+      <div class="combo">
+        <div class="lv"><div class="ln">01</div><div class="li"><svg class="ic"><use href="#i-target"/></svg></div><h4>找场景</h4><p>挑能赚钱的场景</p></div>
+        <div class="x">×</div>
+        <div class="lv"><div class="ln">02</div><div class="li"><svg class="ic"><use href="#i-sliders"/></svg></div><h4>调模型</h4><p>把效果调到够用</p></div>
+        <div class="x">×</div>
+        <div class="lv"><div class="ln">03</div><div class="li"><svg class="ic"><use href="#i-trend"/></svg></div><h4>提转化</h4><p>把用户变成付费</p></div>
+        <div class="x">×</div>
+        <div class="lv"><div class="ln">04</div><div class="li"><svg class="ic"><use href="#i-coins"/></svg></div><h4>控成本</h4><p>把单位成本压住</p></div>
+      </div>
+    </div>
+    <div class="foot"><span>述职 · HTML 样板 · 黑白版</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 05 手段：关键动作 + 真实截图（叠放） -->
+  <section class="slide" id="s-means">
+    <div class="head"><span class="kicker"><span class="num">04</span> 场景 <span class="sep">·</span> 关键动作 + 现场截图</span></div>
+    <div class="stitle">具体怎么做的：把 token 投给"对的场景"</div>
+    <div class="body"><div class="means">
+      <div class="means-l">
+        <div class="mlead">先给每个场景打"<b>价值分</b>"，再把 token 预算<b>集中投进高分场景</b>。<span class="s">不是所有调用都值得花钱 —— 把钱花在能转化、毛利高的场景上。</span></div>
+        <div class="mlist">
+          <div class="mstep"><span class="mn">1</span><span class="mt">按"付费意愿 × 留存 × 毛利"给场景<b>打价值分</b></span></div>
+          <div class="mstep"><span class="mn">2</span><span class="mt">高分场景<b>加大投放</b>，低分场景<b>限流止损</b></span></div>
+          <div class="mstep"><span class="mn">3</span><span class="mt">复盘 ROI、回写模型，<b>持续迭代策略</b></span></div>
+        </div>
+      </div>
+      <div class="means-r">
+        <div class="shot a"><img src="assets/images/score.png" alt="高价值场景识别"></div>
+        <div class="shot b"><img src="assets/images/roi.png" alt="ROI 对比报告"></div>
+      </div>
+    </div></div>
+    <div class="foot"><span>述职 · HTML 样板 · 黑白版</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 06 思考假设 信息图 -->
+  <section class="slide" id="s-hypo">
+    <div class="head"><span class="kicker"><span class="num">05</span> 场景 <span class="sep">·</span> 讲清楚你的思考与假设</span></div>
+    <div class="stitle">用一张信息图，说清我赌的是什么</div>
+    <div class="body"><div class="hypo">
+      <div class="hypolead">核心假设：变现卡在"<b>用对场景</b>"，不在"模型够不够强"。<span class="s">模型早就够用了，但 token 大量花在了不产生付费的场景上 —— 把它集中投到高价值场景，付费转化就会跳变。</span></div>
+      <div class="funnel">
+        <div class="fr"><div class="fn">token 调用</div><div class="fbar" style="width:100%; background:#3a3a3e">100% · 不缺量</div></div>
+        <div class="fr bottleneck"><div class="fn">用对场景</div><div class="fbar" style="width:62%; background:var(--warn)">瓶颈在这里 · 钱花错了人</div><span class="ftag">← 假设的卡点</span></div>
+        <div class="fr"><div class="fn">付费意愿</div><div class="fbar" style="width:44%; background:#a2a2a8">46%</div></div>
+        <div class="fr"><div class="fn">收入</div><div class="fbar" style="width:30%; background:#c4c4ca">6.8%</div></div>
+      </div>
+    </div></div>
+    <div class="foot"><span>述职 · HTML 样板 · 黑白版</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 07 业务飞轮 -->
+  <section class="slide" id="s-ring">
+    <div class="head"><span class="kicker"><span class="num">06</span> 场景 <span class="sep">·</span> 用一个会转的模型讲业务</span></div>
+    <div class="stitle">AI 业务飞轮 · 越转越快</div>
+    <div class="body"><div class="meta-wrap">
+      <div class="ring">
+        <svg class="dial" viewBox="0 0 454 450"><circle class="dash" cx="227" cy="225" r="172" fill="none" stroke="#0A84FF" stroke-width="3" stroke-dasharray="6 11" stroke-linecap="round" opacity="0.4"/></svg>
+        <div class="orbit"><div class="arrow"></div></div>
+        <div class="node" style="left:227px; top:53px; animation-delay:0s;"><span class="nn">1</span><div class="nt">更多用量</div></div>
+        <div class="node" style="left:391px; top:172px; animation-delay:-8s;"><span class="nn">2</span><div class="nt">沉淀数据</div></div>
+        <div class="node" style="left:328px; top:364px; animation-delay:-6s;"><span class="nn">3</span><div class="nt">效果更好</div></div>
+        <div class="node" style="left:126px; top:364px; animation-delay:-4s;"><span class="nn">4</span><div class="nt">更多付费</div></div>
+        <div class="node" style="left:63px; top:172px; animation-delay:-2s;"><span class="nn">5</span><div class="nt">加大投入</div></div>
+        <div class="center"><svg class="cyc"><use href="#i-cycle"/></svg><div class="ct">AI 飞轮</div><div class="cs">越转越快</div></div>
+      </div>
+      <div class="meta-right">
+        <div class="goalbig"><div class="lab"><svg class="ic"><use href="#i-target"/></svg> 这个模型在讲什么</div><p>每个环节都给下一个添柴：用量沉数据、数据调出更好效果、好效果带来付费、付费再加大投入 —— <b>一旦转起来，单位 token 的收益越来越高</b>。</p></div>
+        <div class="hyps">
+          <div class="hyp"><div class="hn">看动画</div><div class="ht">箭头绕环走，<b>走到哪个环节，哪个环节就亮一下</b>。</div></div>
+          <div class="hyp"><div class="hn">实现</div><div class="ht">纯 CSS，节点 delay 与箭头位置<b>精确对齐</b>。</div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="foot"><span>述职 · HTML 样板 · 黑白版</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 08 功能截图 -->
+  <section class="slide" id="s-shots">
+    <div class="head"><span class="kicker"><span class="num">07</span> 场景 <span class="sep">·</span> 晒功能页面 / 产品截图</span></div>
+    <div class="stitle">做了哪些系统 · 按 → 一张张看</div>
+    <div class="body"><div class="ucard">
+      <div class="steps">
+        <div class="st on" data-step="0"><svg class="ic"><use href="#i-dashboard"/></svg><div class="stt">用量收入看板</div></div>
+        <div class="st" data-step="1"><svg class="ic"><use href="#i-list"/></svg><div class="stt">付费转化台账</div></div>
+        <div class="st" data-step="2"><svg class="ic"><use href="#i-sliders"/></svg><div class="stt">配额成本配置</div></div>
+      </div>
+      <div class="carousel" data-idx="0">
+        <div class="cstage">
+          <div class="cpanel on">
+            <div class="cimg"><img src="assets/images/dashboard.png" alt="用量 × 收入看板"></div>
+            <div class="ctext"><span class="cbadge">截图 ①</span><h3>用量 × 收入看板</h3><p>token 烧在哪、哪段带来收入，一屏看清 —— 不用再翻一堆后台。</p></div>
+          </div>
+          <div class="cpanel">
+            <div class="cimg"><img src="assets/images/table.png" alt="付费转化台账"></div>
+            <div class="ctext"><span class="cbadge">截图 ②</span><h3>付费转化台账</h3><p>每个用户从免费到付费走到哪一步，一目了然，方便复盘和交接。</p></div>
+          </div>
+          <div class="cpanel">
+            <div class="cimg"><img src="assets/images/config.png" alt="配额成本配置"></div>
+            <div class="ctext"><span class="cbadge">截图 ③</span><h3>配额 & 成本配置</h3><p>每个场景的 token 上限、成本红线都在这页配，避免悄悄烧超。</p></div>
+          </div>
+        </div>
+        <div class="cnav"><div class="cdots"><span class="cdot on"></span><span class="cdot"></span><span class="cdot"></span></div><span class="chint"><span class="k">→</span> 按方向键 / 点圆点 切换</span></div>
+      </div>
+    </div></div>
+    <div class="foot"><span>述职 · HTML 样板 · 黑白版</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 09 视频成果 -->
+  <section class="slide" id="s-video">
+    <div class="head"><span class="kicker"><span class="num">08</span> 场景 <span class="sep">·</span> 晒视频 / 物料成果</span></div>
+    <div class="stitle">产品 & Demo · 页内直接播放</div>
+    <div class="body"><div class="vids">
+      <div class="vfeat">
+        <div class="vcard"><span class="vbadge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>主推</span><video src="assets/videos/clip_h1.mp4" poster="assets/images/dashboard.png" controls muted loop playsinline preload="metadata"></video></div>
+        <div class="vmeta"><span class="vt">产品 Demo</span><span class="vd">· 03:24 · 完整功能走查</span></div>
+      </div>
+      <div class="vside">
+        <div class="vsm"><div class="vcard"><video src="assets/videos/clip_h2.mp4" poster="assets/images/roi.png" controls muted loop playsinline preload="metadata"></video></div><div class="vmeta"><span class="vt">客户案例</span><span class="vd">· 01:48</span></div></div>
+        <div class="vsm"><div class="vcard"><video src="assets/videos/clip_h3.mp4" poster="assets/images/config.png" controls muted loop playsinline preload="metadata"></video></div><div class="vmeta"><span class="vt">功能讲解</span><span class="vd">· 02:10</span></div></div>
+      </div>
+    </div></div>
+    <div class="foot"><span>述职 · HTML 样板 · 黑白版</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 转场 02 -->
+  <section class="slide divider" id="d2">
+    <div class="glow"></div>
+    <div class="dgrid2">
+      <div class="left"><div class="deye">第二章 · 02</div><div class="dno">02</div><h2>接下来，<br>这套打法怎么放大</h2><div class="dtags"><span>规划</span><span>To-Do</span></div></div>
+      <div class="right">
+        <div class="agi"><span class="an">1</span><span class="at">我是怎么做到的</span></div>
+        <div class="agi cur"><span class="an">2</span><span class="at">接下来怎么打</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 规划 To-Do（统一卡片） -->
+  <section class="slide" id="s-todo">
+    <div class="head"><span class="kicker"><span class="num">09</span> 场景 <span class="sep">·</span> 讲下一步规划</span></div>
+    <div class="stitle">下一步 · 重点先行</div>
+    <div class="body"><div class="tgrid">
+      <div class="tcol-l">
+        <div class="tcard feat">
+          <div class="tick"><svg class="ic"><use href="#i-target"/></svg></div>
+          <span class="pri">◆ 优先推进</span>
+          <div class="tlead">把"识别高价值场景"<br>做成稳定能力</div>
+          <div class="tdesc">让系统稳定判断哪些场景值得投 token —— 这是飞轮能不能持续转起来的关键一步。</div>
+        </div>
+      </div>
+      <div class="tcol-r">
+        <div class="tcard"><div class="tick"><svg class="ic"><use href="#i-users"/></svg></div><div><div class="tlead">把 SOP 交接给团队</div><div class="tdesc">不依赖单点，沉淀成团队能力</div></div></div>
+        <div class="tcard"><div class="tick"><svg class="ic"><use href="#i-bar"/></svg></div><div><div class="tlead">补齐 AB 实验，拿置信结论</div><div class="tdesc">把"有效"从定性做成定量</div></div></div>
+        <div class="tcard"><div class="tick"><svg class="ic"><use href="#i-spark"/></svg></div><div><div class="tlead">探索新的变现场景</div><div class="tdesc">在现有飞轮外，再找一个新入口</div></div></div>
+      </div>
+    </div></div>
+    <div class="foot"><span>述职 · HTML 样板 · 黑白版</span><span class="bar"><i></i></span><span class="pageno"></span></div>
+  </section>
+
+  <!-- 结尾 -->
+  <section class="slide closing" id="s-end">
+    <div class="glow"></div>
+    <div class="lg">述</div>
+    <h2>把 token，<em>变成增长和收入</em></h2>
+    <p>纯 HTML，换主题只改几个颜色，换内容只改文字 —— 结构与质感直接复用。</p>
+    <div class="tags"><span>开场背景</span><span>开门见山晒结果</span><span>组合拳</span><span>关键动作截图</span><span>思考假设信息图</span><span>业务飞轮</span><span>功能截图</span><span>视频成果</span><span>下一步规划</span></div>
+  </section>
+
+</div></div>
+
+<div id="nav">
+  <button id="prev" title="上一页">‹</button>
+  <span class="idx"><span id="cur">1</span> / <span id="tot">1</span></span>
+  <button id="next" title="下一页">›</button>
+  <button id="fs" title="全屏">⛶</button>
+</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length, i = 0;
+  var stage = document.getElementById('stage'), topbar = document.getElementById('topbar');
+  slides.forEach(function(s, idx){
+    var p = s.querySelector('.pageno'); if(p) p.textContent = String(idx+1).padStart(2,'0');
+    var b = s.querySelector('.bar i'); if(b) b.style.width = ((idx+1)/total*100)+'%';
+  });
+  document.getElementById('tot').textContent = total;
+  function pauseVideos(){ document.querySelectorAll('video').forEach(function(v){ try{v.pause();}catch(e){} }); }
+  function animateCounts(slide){
+    slide.querySelectorAll('[data-to]').forEach(function(el){
+      var to=parseFloat(el.getAttribute('data-to')), dec=(el.getAttribute('data-dec')||0)|0, dur=950, t0=null;
+      function step(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1); var e=0.5-Math.cos(Math.PI*p)/2; var v=to*e;
+        el.textContent = dec? v.toFixed(dec) : Math.round(v); if(p<1) requestAnimationFrame(step); }
+      requestAnimationFrame(step);
+    });
+  }
+  function setCarousel(c, idx){
+    c.dataset.idx = idx;
+    c.querySelectorAll('.cpanel').forEach(function(p,k){ p.classList.toggle('on', k===idx); });
+    c.querySelectorAll('.cdot').forEach(function(d,k){ d.classList.toggle('on', k===idx); });
+    var sl=c.closest('.slide'), steps = sl? sl.querySelectorAll('.steps .st') : [];
+    steps.forEach(function(st,k){ st.classList.toggle('on', k===idx); });
+  }
+  function activeCarousel(){ return slides[i].querySelector('.carousel'); }
+  function show(n){
+    if(n<0)n=0; if(n>=total)n=total-1;
+    if(n!==i) pauseVideos();
+    slides[i].classList.remove('active'); i=n;
+    var cur=slides[i]; cur.classList.add('active');
+    var c=cur.querySelector('.carousel'); if(c) setCarousel(c,0);
+    animateCounts(cur);
+    document.getElementById('cur').textContent=i+1; topbar.style.width=((i+1)/total*100)+'%';
+  }
+  function next(){ var c=activeCarousel(); if(c){var x=+(c.dataset.idx||0),n=c.querySelectorAll('.cpanel').length; if(x<n-1){setCarousel(c,x+1);return;}} show(i+1); }
+  function prev(){ var c=activeCarousel(); if(c){var x=+(c.dataset.idx||0); if(x>0){setCarousel(c,x-1);return;}} show(i-1); }
+  document.getElementById('next').onclick=next; document.getElementById('prev').onclick=prev;
+  document.getElementById('fs').onclick=function(){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();} };
+  document.addEventListener('click', function(e){ var d=e.target.closest('.cdot'); if(d){ var c=d.closest('.carousel'); setCarousel(c, Array.prototype.slice.call(c.querySelectorAll('.cdot')).indexOf(d)); } });
+  document.addEventListener('keydown', function(e){
+    if(e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    switch(e.key){
+      case 'ArrowRight': case 'PageDown': case ' ': e.preventDefault(); next(); break;
+      case 'ArrowLeft': case 'PageUp': prev(); break;
+      case 'Home': show(0); break; case 'End': show(total-1); break;
+      case 'f': case 'F': document.getElementById('fs').click(); break;
+    }
+  });
+  function fit(){ var s=Math.min(window.innerWidth/1280, window.innerHeight/720); stage.style.transform='translate(-50%,-50%) scale('+s+')'; }
+  window.addEventListener('resize', fit); fit();
+  topbar.style.width=(1/total*100)+'%';
+})();
+</script>
+</body>
+</html>
