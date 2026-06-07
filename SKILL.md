@@ -43,7 +43,9 @@ outline with the user** → only then build. See `references/workflow.md`.
    a reference site to emulate. Confirm only what actually changes.
 5. **Build** — start from `templates/deck-template.html`, assemble components from
    `references/components.md`, obey `references/design-principles.md`.
-6. **Verify** — overflow, animation sync, no emoji, no banned patterns. See `references/verify.md`.
+6. **Verify** — run `scripts/validate-deck.sh` (hard gates), then the **brand-color review**
+   (`references/brand-review.md`): per-page squint + ≤2 strong accent/slide + whole-deck consistency.
+   Plus overflow & animation sync. See `references/verify.md`.
 7. **Package & hand off** — zip the folder; the recipient unzips and opens `index.html`. Offer a
    speaker-notes draft (the model already knows every slide's intent — this is nearly free).
 
@@ -71,6 +73,8 @@ layered-shots / flywheel) → todo-featured → closing.
 - [ ] **No left-vertical-bar cards; statements are plain text, not boxes**
 - [ ] Animation is restrained (1–2 moments, not every element)
 - [ ] Ran `scripts/validate-deck.sh <file>` → 0 violations; fixed overflow; verified per `references/verify.md`
+- [ ] Ran the **brand-color review** (`references/brand-review.md`): every slide passes the squint test
+      (≤2 strong accent uses), the deck is color-consistent, Color score ≥ 8
 - [ ] Packaged (zip with assets + fonts note); offered a speaker-notes draft
 
 ## The design system
@@ -82,6 +86,9 @@ layered-shots / flywheel) → todo-featured → closing.
 - **`references/design-principles.md`** — the do's and don'ts, including the hard prohibitions:
   **no emoji (use one open-source line-icon set), no card with a left vertical color bar, restrained
   animation, fewer cards (plain text for statements).** Read this before styling anything.
+- **`references/brand-review.md`** — how to **constrain + verify** brand-color usage so you don't
+  over/under-color: bounded color roles + proportion + a ≤2-accent-per-slide cap (the constraint), and
+  a per-page (squint test) + whole-deck review pass (the verification). Use for any re-brand.
 - **`references/components.md`** — the layout component catalog: cover, section divider, overview
   table, data/result page, thinking-&-hypothesis infographic, animated flywheel/cycle, screenshot
   carousel, layered real-screenshot page, To-Do (featured + list), video wall, closing.

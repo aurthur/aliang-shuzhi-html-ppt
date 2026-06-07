@@ -56,6 +56,13 @@ Rules:
 - Light surfaces, not dark — soft shadows read on light and vanish on dark (Apple HIG: darker
   materials hide shadows and reduce depth).
 
+**Color roles & budget (the constraint, not a vibe).** The brand hue is a *role*, not a free color:
+it lives only in `--accent` (the solid-fill/CTA role); everything else is neutral or semantic. Per
+slide target: neutral **70–90%** · accent **5–10%** · semantic **0–5%**. **Hard cap: ≤ 2 *strong*
+accent uses per content slide** (fills/CTAs/large colored figures/links; small soft-tint badges don't
+count). Getting "the right amount of color" is a judgment you *verify*, not a recipe you follow once —
+**run the per-page + whole-deck review in `references/brand-review.md` before shipping.**
+
 ## Typography
 
 **Apple's web font, no Noto, no web-font `<link>` (system-native = zero-network, works offline /

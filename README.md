@@ -96,6 +96,7 @@ aliang-shuzhi-html-ppt/
 ├── references/
 │   ├── design-system.md           # 设计 token：配色 · 字体 · 间距 · 阴影 · 动效 · 数字
 │   ├── design-principles.md       # do's & don'ts + 硬禁忌项
+│   ├── brand-review.md           # 品牌色「约束(角色+比例+≤2上限) + 每页/整体审查」机制
 │   ├── components.md             # 一套封闭的「命名布局」菜单
 │   ├── workflow.md              # 需求 → 确认分页 → 搭建 → 自检 → 打包
 │   └── verify.md                # 溢出 / 动画同步 / 违规模式自检
